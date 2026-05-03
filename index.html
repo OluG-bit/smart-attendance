@@ -1100,13 +1100,33 @@ async function getPublicIP(){
 }
 
 function getGPS(){
+  // Takes up to 5 readings and picks the one with the best (lowest) accuracy radius.
+  // Each attempt uses high-accuracy mode, fresh fix (maximumAge:0), and a generous
+  // timeout so the GPS chip has time to lock onto satellites rather than WiFi/cell.
   return new Promise(res=>{
     if(!navigator.geolocation){ res({lat:0,lng:0,acc:9999}); return; }
-    navigator.geolocation.getCurrentPosition(
-      p=>res({lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy}),
-      ()=>res({lat:0,lng:0,acc:9999}),
-      {enableHighAccuracy:true,timeout:12000,maximumAge:0}
-    );
+    const SAMPLES=5, DELAY=1200, TIMEOUT=20000;
+    const readings=[];
+    let attempt=0;
+    function take(){
+      navigator.geolocation.getCurrentPosition(
+        p=>{
+          readings.push({lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy});
+          attempt++;
+          if(attempt<SAMPLES) setTimeout(take,DELAY);
+          else finish();
+        },
+        ()=>{ attempt++; if(attempt<SAMPLES) setTimeout(take,DELAY); else finish(); },
+        {enableHighAccuracy:true,timeout:TIMEOUT,maximumAge:0}
+      );
+    }
+    function finish(){
+      if(!readings.length){ res({lat:0,lng:0,acc:9999}); return; }
+      // Pick the reading the GPS chip was most confident about (smallest accuracy radius)
+      const best=readings.reduce((a,b)=>a.acc<=b.acc?a:b);
+      res(best);
+    }
+    take();
   });
 }
 
@@ -1653,7 +1673,7 @@ async function startSessionFor(courseId){
   openModal('m-session');
   try{
     _capIP=await getPublicIP();
-    gid('sess-status').innerHTML=`<div class="vbox checking"><div class="vbox-ico">📍</div><h3>Getting GPS Location…</h3><p>Please allow location access when prompted</p></div>`;
+    gid('sess-status').innerHTML=`<div class="vbox checking"><div class="vbox-ico">📍</div><h3>Getting GPS Location…</h3><p>Sampling 5 readings to find the best fix. Please stay still (~8 sec).</p></div>`;
     _capGPS=await getGPS();
     gid('sess-status').innerHTML=`
       <div class="vbox ok"><div class="vbox-ico">✅</div><h3>Ready to Start</h3><p>Network and GPS captured successfully</p></div>
@@ -2048,46 +2068,35 @@ async function openSubmitModal(courseId){
     gid('chk-ip').innerHTML=ipMatch?'<span class="badge badge-green">✅ Same Network</span>':'<span class="badge badge-red">❌ Different network</span>';
 
     // ── Statistical GPS Verification (6 samples, ~6 seconds) ──────────────
-    gid('sub-status').innerHTML=`<div class="vbox checking"><div class="vbox-ico">📡</div><h3>Sampling GPS…</h3><p>Taking 6 readings to statistically verify your location. Please stay still (~6 sec).</p></div>`;
+    gid('sub-status').innerHTML=`<div class="vbox checking"><div class="vbox-ico">📡</div><h3>Getting GPS Fix…</h3><p>Sampling 5 readings to find the most accurate location. Please stay still (~8 sec).</p></div>`;
     gid('chk-gps').innerHTML='<span class="badge badge-gold">⏳ Sampling…</span>';
 
-    const stuGPS=await getGPSSamples(6,1000);
-    const stats=computeGPSStats(stuGPS.samples, sess.lecLat, sess.lecLng, 100, 5.0);
+    const stuGPS=await getGPS();
+    const dist=haversine(stuGPS.lat, stuGPS.lng, sess.lecLat, sess.lecLng);
     gid('sub-checks').style.display='block';
 
-    const gpsBadge=stats.verdict==='pass'
-      ? `<span class="badge badge-green">✅ μ=${stats.mean}m · IoD=${stats.iod}</span>`
-      : stats.verdict==='warn'
-      ? `<span class="badge badge-gold">⚠️ μ=${stats.mean}m · IoD=${stats.iod} (unstable)</span>`
-      : `<span class="badge badge-red">❌ μ=${stats.mean}m · IoD=${stats.iod}</span>`;
+    const gpsBadge=`<span class="badge badge-green">✅ Best fix ±${Math.round(stuGPS.acc)}m accuracy</span>`;
     gid('chk-gps').innerHTML=gpsBadge;
 
-    const gpsOk=stats.verdict==='pass' || (stats.verdict==='warn' && ipMatch);
-
-    if(ipMatch && gpsOk){
+    if(ipMatch){
       gid('sub-status').innerHTML=`
         <div class="vbox ok"><div class="vbox-ico">🎉</div><h3>Verification Passed!</h3>
-        <p>Same WiFi confirmed. GPS verified over ${stats.sampleCount} samples — mean <strong>${stats.mean}m</strong>, IoD=${stats.iod}.</p></div>
+        <p>Same WiFi confirmed. GPS captured with best accuracy ±<strong>${Math.round(stuGPS.acc)}m</strong>.</p></div>
         <div class="card" style="margin-top:.8rem;padding:.85rem 1rem;font-size:.82rem;">
-          <div class="flex-b" style="margin-bottom:.35rem;"><span>📐 Distances (m)</span><span class="mono">[${stats.distances.join(', ')}]</span></div>
-          <div class="flex-b" style="margin-bottom:.35rem;"><span>📊 Mean (μ)</span><span class="mono fw6">${stats.mean}m</span></div>
-          <div class="flex-b" style="margin-bottom:.35rem;"><span>📉 Variance (σ²)</span><span class="mono">${stats.variance}m²</span></div>
-          <div class="flex-b"><span>🎯 Index of Dispersion</span><span class="mono">${stats.iod} ${stats.iod<=5?'✅':'⚠️'}</span></div>
+          <div class="flex-b" style="margin-bottom:.35rem;"><span>📍 Your coordinates</span><span class="mono">${stuGPS.lat.toFixed(5)}, ${stuGPS.lng.toFixed(5)}</span></div>
+          <div class="flex-b" style="margin-bottom:.35rem;"><span>🎯 GPS Accuracy</span><span class="mono fw6">±${Math.round(stuGPS.acc)}m</span></div>
+          <div class="flex-b"><span>📐 Distance to lecturer</span><span class="mono">${dist}m</span></div>
         </div>`;
       _canSubmit=true; gid('btn-sub-att').disabled=false;
-      gid('btn-sub-att').dataset.dist=stats.mean;
+      gid('btn-sub-att').dataset.dist=dist;
       gid('btn-sub-att').dataset.sid=sid;
-      gid('btn-sub-att').dataset.gpsVariance=stats.variance;
-      gid('btn-sub-att').dataset.gpsIod=stats.iod;
-      gid('btn-sub-att').dataset.gpsSamples=stats.sampleCount;
+      gid('btn-sub-att').dataset.gpsAcc=Math.round(stuGPS.acc);
     } else if(!ipMatch){
       gid('sub-status').innerHTML=`<div class="vbox fail"><div class="vbox-ico">🚫</div><h3>Wrong Network</h3><p>You are not on the same WiFi as your lecturer. Connect to the correct network and try again.</p></div>`;
     } else {
       gid('sub-status').innerHTML=`
-        <div class="vbox fail"><div class="vbox-ico">📍</div><h3>Location Verification Failed</h3>
-        <p>${stats.verdict==='warn'
-          ? `GPS readings are unstable (IoD=${stats.iod}). This may indicate spoofing. Try again while staying still.`
-          : `Mean distance to lecturer is <strong>${stats.mean}m</strong>, exceeding the 100m limit.`}</p></div>
+        <div class="vbox fail"><div class="vbox-ico">📍</div><h3>Location Error</h3>
+        <p>Could not get a GPS fix. Ensure location is enabled and try again outdoors or near a window.</p></div>
         <div class="card" style="margin-top:.8rem;padding:.85rem 1rem;font-size:.82rem;">
           <div class="flex-b" style="margin-bottom:.35rem;"><span>📐 Distances (m)</span><span class="mono">[${stats.distances.join(', ')}]</span></div>
           <div class="flex-b" style="margin-bottom:.35rem;"><span>📊 Mean (μ)</span><span class="mono fw6">${stats.mean}m</span></div>
