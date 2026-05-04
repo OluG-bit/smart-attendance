@@ -2388,4 +2388,2394 @@ window.addEventListener('load', async ()=>{
 });
 </script>
 </body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAU · Smart Attendance System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+
+
+<style>
+:root {
+  --g: #1B4D2E;
+  --g2: #2E7D4F;
+  --g3: #4CAF72;
+  --gd: #0D2618;
+  --gold: #C89B2A;
+  --gold2: #F0C040;
+  --cream: #FAF7F0;
+  --cream2: #F0EBE0;
+  --sand: #E8DFC8;
+  --text: #1A1A1A;
+  --text2: #4A5568;
+  --text3: #718096;
+  --white: #FFFFFF;
+  --border: #D4C9B0;
+  --border2: #E8E0D0;
+  --red: #C0392B;
+  --red2: #E74C3C;
+  --blue: #2563EB;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+  --shadow2: 0 8px 32px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.08);
+  --shadow3: 0 24px 64px rgba(0,0,0,.16);
+  --r: 10px;
+  --r2: 16px;
+  --r3: 24px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;font-size:15px;-webkit-font-smoothing:antialiased;}
+
+/* ─── SCREENS ───────────────────────────────── */
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
+
+/* ─── LANDING ───────────────────────────────── */
+#s-landing{
+  background:var(--gd);
+  position:relative;overflow:hidden;
+  align-items:center;justify-content:center;
+  padding:3rem 1.5rem;
+}
+.land-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(46,125,79,.35) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(200,155,42,.15) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(27,77,46,.4) 0%, transparent 70%);
+}
+.land-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.land-content{position:relative;z-index:2;text-align:center;max-width:680px;}
+.land-seal{
+  width:130px;height:130px;border-radius:50%;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 2rem;overflow:hidden;
+  box-shadow:0 0 0 3px rgba(200,155,42,.5),0 0 0 18px rgba(200,155,42,.08),0 0 60px rgba(200,155,42,.25);
+}
+.land-seal img{width:115px;height:115px;object-fit:contain;}
+.land-seal span{display:none;}
+.land-title{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(2.4rem,5vw,3.6rem);
+  color:var(--white);line-height:1.1;margin-bottom:.75rem;
+  letter-spacing:-.02em;
+}
+.land-title em{color:var(--gold2);font-style:italic;}
+.land-sub{color:rgba(255,255,255,.5);font-size:1rem;line-height:1.6;margin-bottom:3.5rem;font-weight:300;}
+.land-cards{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.land-card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r2);padding:2rem 1.8rem;
+  cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);
+  text-align:center;color:var(--white);width:176px;
+  position:relative;overflow:hidden;
+  backdrop-filter:blur(8px);
+}
+.land-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.08),transparent);
+  opacity:0;transition:opacity .25s;
+}
+.land-card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.25);box-shadow:0 20px 40px rgba(0,0,0,.4);}
+.land-card:hover::before{opacity:1;}
+.land-card .lc-icon{font-size:2.2rem;margin-bottom:1rem;display:block;}
+.land-card .lc-label{font-size:.95rem;font-weight:600;margin-bottom:.3rem;}
+.land-card .lc-desc{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.4;}
+.land-card.admin-card{border-color:rgba(200,155,42,.3);}
+.land-card.admin-card:hover{border-color:rgba(200,155,42,.6);box-shadow:0 20px 40px rgba(200,155,42,.15);}
+.land-footer{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  color:rgba(255,255,255,.2);font-size:.75rem;text-align:center;
+  display:flex;align-items:center;gap:1rem;white-space:nowrap;
+}
+.land-footer span{width:1px;height:12px;background:rgba(255,255,255,.15);}
+
+/* ─── AUTH ───────────────────────────────────── */
+#s-auth{
+  background:var(--cream);
+  align-items:center;justify-content:center;
+  padding:2rem 1rem;min-height:100vh;
+}
+.auth-wrap{width:100%;max-width:460px;}
+.auth-back{
+  display:inline-flex;align-items:center;gap:.4rem;
+  color:var(--text2);font-size:.85rem;cursor:pointer;
+  margin-bottom:1.5rem;transition:color .15s;
+}
+.auth-back:hover{color:var(--g);}
+.auth-box{
+  background:var(--white);border:1px solid var(--border2);
+  border-radius:var(--r3);padding:2.5rem;
+  box-shadow:var(--shadow2);
+}
+.auth-role-header{text-align:center;margin-bottom:2rem;}
+.auth-role-icon{
+  width:64px;height:64px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;margin:0 auto 1rem;
+}
+.auth-role-icon.green{background:linear-gradient(135deg,var(--g),var(--g2));}
+.auth-role-icon.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));}
+.auth-h2{font-family:'Instrument Serif',serif;font-size:1.9rem;color:var(--gd);margin-bottom:.3rem;}
+.auth-p{font-size:.88rem;color:var(--text3);}
+
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--cream2);border-radius:var(--r);padding:4px;margin-bottom:1.8rem;}
+.auth-tab{padding:.6rem;text-align:center;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:500;color:var(--text2);transition:all .15s;}
+.auth-tab.active{background:var(--white);color:var(--g);font-weight:600;box-shadow:var(--shadow);}
+
+.notice-box{
+  background:linear-gradient(135deg,rgba(27,77,46,.06),rgba(27,77,46,.03));
+  border:1px solid rgba(27,77,46,.15);border-radius:var(--r);
+  padding:.85rem 1rem;margin-bottom:1.5rem;font-size:.83rem;color:var(--text2);line-height:1.5;
+}
+.notice-box.gold-notice{
+  background:linear-gradient(135deg,rgba(200,155,42,.08),rgba(200,155,42,.03));
+  border-color:rgba(200,155,42,.25);
+}
+.notice-box strong{color:var(--g);}
+
+/* ─── FORMS ──────────────────────────────────── */
+.fg{margin-bottom:1.1rem;}
+label{display:block;font-size:.8rem;font-weight:600;color:var(--text2);margin-bottom:.4rem;letter-spacing:.02em;text-transform:uppercase;}
+input[type=text],input[type=email],input[type=password],input[type=tel],select,textarea{
+  width:100%;padding:.75rem 1rem;
+  border:1.5px solid var(--border2);border-radius:var(--r);
+  font-family:inherit;font-size:.92rem;outline:none;
+  transition:border-color .15s,box-shadow .15s,background .15s;
+  background:var(--cream);color:var(--text);
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--g);background:var(--white);
+  box-shadow:0 0 0 3px rgba(27,77,46,.1);
+}
+input:disabled,select:disabled{background:var(--cream2);color:var(--text3);cursor:not-allowed;}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+
+/* ─── BUTTONS ────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.8rem 1.6rem;border-radius:var(--r);border:none;
+  font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;
+  transition:all .2s;text-decoration:none;
+}
+.btn-full{width:100%;}
+.btn-primary{background:var(--g);color:var(--white);}
+.btn-primary:hover{background:var(--gd);box-shadow:0 4px 16px rgba(27,77,46,.3);}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--gd);}
+.btn-gold:hover{box-shadow:0 4px 16px rgba(200,155,42,.4);transform:translateY(-1px);}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text2);}
+.btn-outline:hover{border-color:var(--g);color:var(--g);background:rgba(27,77,46,.04);}
+.btn-danger{background:var(--red);color:var(--white);}
+.btn-danger:hover{background:#a93226;}
+.btn-ghost{background:transparent;color:var(--text2);padding:.5rem .8rem;}
+.btn-ghost:hover{background:var(--cream2);}
+.btn-sm{padding:.45rem 1rem;font-size:.82rem;border-radius:8px;}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
+
+/* ─── TOAST ──────────────────────────────────── */
+#toasts{position:fixed;top:1.2rem;right:1.2rem;z-index:9999;display:flex;flex-direction:column;gap:.6rem;pointer-events:none;}
+.toast{
+  background:var(--white);border-radius:var(--r2);
+  padding:.85rem 1.2rem;box-shadow:var(--shadow3);
+  border-left:4px solid var(--g);font-size:.87rem;
+  max-width:300px;pointer-events:auto;
+  animation:tIn .25s cubic-bezier(.4,0,.2,1);
+  display:flex;align-items:flex-start;gap:.6rem;
+  border-top:1px solid var(--border2);border-right:1px solid var(--border2);border-bottom:1px solid var(--border2);
+}
+.toast.err{border-left-color:var(--red2);}
+.toast.warn{border-left-color:#E67E22;}
+.toast.info{border-left-color:var(--blue);}
+.toast-icon{flex-shrink:0;font-size:1rem;}
+.toast-msg{line-height:1.4;color:var(--text);}
+@keyframes tIn{from{transform:translateX(110%);opacity:0;}to{transform:none;opacity:1;}}
+
+/* ─── TOPBAR ─────────────────────────────────── */
+.topbar{
+  background:var(--gd);color:var(--white);
+  display:flex;align-items:center;padding:0 1.5rem;height:58px;
+  box-shadow:0 2px 12px rgba(0,0,0,.3);position:sticky;top:0;z-index:200;
+  gap:1rem;flex-shrink:0;
+}
+.topbar-logo{font-family:'Instrument Serif',serif;font-size:1.2rem;flex:1;letter-spacing:-.01em;display:flex;align-items:center;gap:.55rem;}
+.topbar-logo img{width:30px;height:30px;border-radius:50%;object-fit:contain;background:#fff;padding:2px;flex-shrink:0;}
+.topbar-logo em{color:var(--gold2);font-style:italic;}
+.topbar-user{display:flex;align-items:center;gap:.75rem;}
+.topbar-avatar{
+  width:34px;height:34px;border-radius:50%;overflow:hidden;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.8rem;color:var(--gd);flex-shrink:0;border:2px solid rgba(255,255,255,.15);
+}
+.topbar-avatar img{width:100%;height:100%;object-fit:cover;}
+.topbar-info{display:flex;flex-direction:column;}
+.topbar-name{font-size:.85rem;font-weight:600;color:var(--white);}
+.topbar-role{font-size:.7rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;}
+.badge-role{
+  font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.badge-role.admin{background:rgba(200,155,42,.2);color:var(--gold2);}
+.badge-role.lecturer{background:rgba(76,175,114,.2);color:var(--g3);}
+.badge-role.student{background:rgba(37,99,235,.2);color:#93C5FD;}
+.topbar-logout{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.7);padding:.4rem .85rem;border-radius:8px;
+  font-size:.8rem;cursor:pointer;font-family:inherit;font-weight:500;
+  transition:all .15s;
+}
+.topbar-logout:hover{background:rgba(255,255,255,.15);color:var(--white);}
+
+/* ─── APP LAYOUT ─────────────────────────────── */
+.app-body{display:flex;flex:1;overflow:hidden;min-height:calc(100vh - 58px);}
+.sidebar{
+  width:220px;background:var(--white);border-right:1px solid var(--border2);
+  padding:1.2rem 0;flex-shrink:0;overflow-y:auto;
+}
+.sb-section{
+  font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text3);padding:.5rem 1.5rem;margin-top:1rem;
+}
+.sb-item{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.7rem 1.5rem;cursor:pointer;font-size:.88rem;font-weight:500;
+  color:var(--text2);border-left:3px solid transparent;transition:all .15s;
+}
+.sb-item:hover{background:var(--cream);color:var(--text);}
+.sb-item.active{background:rgba(27,77,46,.06);color:var(--g);border-left-color:var(--g);font-weight:600;}
+.sb-item .si{width:18px;text-align:center;font-size:1rem;flex-shrink:0;}
+.main{flex:1;overflow-y:auto;padding:2rem;}
+
+/* ─── PANELS ─────────────────────────────────── */
+.panel{display:none;animation:fadeUp .2s ease;}
+.panel.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.panel-head{margin-bottom:2rem;}
+.panel-title{font-family:'Instrument Serif',serif;font-size:2rem;color:var(--gd);line-height:1;}
+.panel-sub{color:var(--text3);font-size:.9rem;margin-top:.4rem;}
+
+/* ─── STATS GRID ─────────────────────────────── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:2rem;}
+.stat{
+  background:var(--white);border:1px solid var(--border2);border-radius:var(--r2);
+  padding:1.3rem;position:relative;overflow:hidden;
+}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--g),var(--g2));}
+.stat-ico{font-size:1.5rem;margin-bottom:.6rem;}
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:600;color:var(--gd);line-height:1;}
+.stat-lbl{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-top:.3rem;}
+
+/* ─── CARDS ──────────────────────────────────── */
+.card{background:var(--white);border:1px solid var(--border2);border-radius:var(--r2);padding:1.5rem;margin-bottom:1.2rem;}
+.card-head{font-weight:700;font-size:.95rem;color:var(--gd);margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem;}
+
+/* ─── TABLE ──────────────────────────────────── */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+thead th{
+  background:var(--cream2);padding:.7rem 1rem;text-align:left;
+  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);
+  border-bottom:1px solid var(--border);
+}
+tbody td{padding:.75rem 1rem;border-bottom:1px solid var(--border2);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--cream);}
+
+/* ─── BADGES ─────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .65rem;border-radius:20px;font-size:.75rem;font-weight:600;}
+.badge-green{background:#D1FAE5;color:#065F46;}
+.badge-red{background:#FEE2E2;color:#991B1B;}
+.badge-gold{background:#FEF3C7;color:#92400E;}
+.badge-blue{background:#DBEAFE;color:#1E40AF;}
+.badge-gray{background:var(--cream2);color:var(--text3);}
+
+/* ─── COURSE GRID ────────────────────────────── */
+.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
+.ccard{
+  background:var(--white);border:1px solid var(--border2);border-radius:var(--r2);
+  padding:1.4rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
+}
+.ccard::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--g),var(--g3));
+}
+.ccard.live::after{background:linear-gradient(90deg,#22C55E,#4ADE80);animation:shimmer 2s infinite;}
+@keyframes shimmer{0%,100%{opacity:1;}50%{opacity:.5;}}
+.ccard:hover{box-shadow:var(--shadow2);transform:translateY(-2px);}
+.cc-code{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;color:var(--gold);margin-bottom:.4rem;letter-spacing:.05em;}
+.cc-name{font-weight:700;font-size:1rem;color:var(--gd);margin-bottom:.5rem;line-height:1.3;}
+.cc-meta{font-size:.82rem;color:var(--text3);margin-bottom:.3rem;}
+.cc-foot{margin-top:1rem;display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap;}
+
+/* ─── MODAL ──────────────────────────────────── */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(10,20,15,.6);z-index:500;
+  align-items:center;justify-content:center;padding:1rem;
+  backdrop-filter:blur(4px);
+}
+.overlay.open{display:flex;}
+.modal{
+  background:var(--white);border-radius:var(--r3);
+  padding:2rem;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;
+  box-shadow:var(--shadow3);animation:mIn .2s cubic-bezier(.4,0,.2,1);
+  border:1px solid var(--border2);
+}
+@keyframes mIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:none;}}
+.modal-title{font-family:'Instrument Serif',serif;font-size:1.5rem;color:var(--gd);margin-bottom:1.5rem;}
+.modal-foot{display:flex;gap:.8rem;margin-top:1.5rem;justify-content:flex-end;}
+
+/* ─── VERIFY STATUS ──────────────────────────── */
+.vbox{
+  border-radius:var(--r2);padding:1.5rem;text-align:center;margin-bottom:1rem;
+  border:1px solid;
+}
+.vbox.checking{background:#FFFBEB;border-color:#F59E0B;}
+.vbox.ok{background:#F0FDF4;border-color:#22C55E;}
+.vbox.fail{background:#FFF1F2;border-color:#F43F5E;}
+.vbox-ico{font-size:2.5rem;margin-bottom:.75rem;}
+.vbox h3{font-weight:700;font-size:1rem;margin-bottom:.35rem;}
+.vbox p{font-size:.85rem;color:var(--text3);}
+.check-row{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border2);font-size:.88rem;}
+.check-row:last-child{border-bottom:none;}
+
+/* ─── LIVE BANNER ────────────────────────────── */
+.live-banner{
+  background:linear-gradient(135deg,var(--g),var(--g2));
+  color:var(--white);padding:1rem 1.4rem;border-radius:var(--r2);
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;
+}
+.live-dot{width:8px;height:8px;background:#4ADE80;border-radius:50%;animation:pulse 1s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,.5);}50%{box-shadow:0 0 0 6px rgba(74,222,128,0);}}
+
+/* ─── PHOTO UPLOAD ───────────────────────────── */
+.photo-upload{
+  width:96px;height:96px;border-radius:50%;
+  border:2.5px dashed var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;overflow:hidden;margin:0 auto .8rem;
+  background:var(--cream2);transition:border-color .15s;
+}
+.photo-upload:hover{border-color:var(--g);}
+.photo-upload img{width:100%;height:100%;object-fit:cover;}
+input[type=file]{display:none;}
+
+/* ─── DEVICE INFO BOX ────────────────────────── */
+.device-box{
+  background:var(--cream2);border:1px solid var(--border);
+  border-radius:var(--r);padding:.85rem 1rem;
+  font-size:.8rem;color:var(--text2);margin-bottom:1rem;
+  display:flex;align-items:flex-start;gap:.6rem;
+}
+.device-box .di{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text3);margin-top:.2rem;word-break:break-all;}
+
+/* ─── EMPTY STATE ────────────────────────────── */
+.empty{text-align:center;padding:3.5rem 2rem;color:var(--text3);}
+.empty-ico{font-size:3rem;margin-bottom:.8rem;opacity:.6;}
+.empty p{font-size:.9rem;}
+
+/* ─── AVATAR ─────────────────────────────────── */
+.mini-avatar{
+  width:30px;height:30px;border-radius:50%;overflow:hidden;
+  background:linear-gradient(135deg,var(--g),var(--g2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:700;color:var(--white);flex-shrink:0;
+}
+
+/* ─── SEARCH ─────────────────────────────────── */
+.search-wrap{position:relative;margin-bottom:1rem;}
+.search-wrap input{padding-left:2.4rem;}
+.search-wrap::before{content:'⌕';position:absolute;left:.85rem;top:50%;transform:translateY(-50%);font-size:1rem;color:var(--text3);}
+
+/* ─── SPINNER ────────────────────────────────── */
+.spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:var(--white);border-radius:50%;animation:rot .6s linear infinite;}
+@keyframes rot{to{transform:rotate(360deg);}}
+
+/* ─── MISC ───────────────────────────────────── */
+.divider{border:none;border-top:1px solid var(--border2);margin:1.5rem 0;}
+.flex{display:flex;}.flex-b{display:flex;justify-content:space-between;align-items:center;}
+.gap-1{gap:.5rem;}.gap-2{gap:1rem;}
+.mt-2{margin-top:1rem;}.mb-2{margin-bottom:1rem;}
+.text-sm{font-size:.83rem;}.text-xs{font-size:.75rem;}.text-c{text-align:center;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.fw6{font-weight:600;}.fw7{font-weight:700;}
+.col-g{color:var(--g);}.col-r{color:var(--red2);}.col-3{color:var(--text3);}
+
+/* ─── ADMIN SPECIAL ──────────────────────────── */
+.admin-topbar{background:#0D1B2A!important;}
+
+/* ─── SCROLLBAR ──────────────────────────────── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+@media(max-width:640px){
+  .sidebar{display:none;}
+  .fg-row{grid-template-columns:1fr;}
+  .land-card{width:140px;padding:1.5rem 1.2rem;}
+  .main{padding:1rem;}
+  .stats{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div id="toasts"></div>
+
+
+<!-- ══════════════ LANDING ══════════════ -->
+<div id="s-landing" class="screen active">
+  <div class="land-bg"></div>
+  <div class="land-grid"></div>
+  <div class="land-content">
+    <div class="land-seal"><img src="data:image/jpeg;base64,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" alt="OAU Logo"></div>
+    <h1 class="land-title">Smart <em>Attendance</em><br>System</h1>
+    <p class="land-sub">Obafemi Awolowo University, Ile-Ife<br>Powered by GPS proximity &amp; network verification</p>
+    <div class="land-cards">
+      <div class="land-card admin-card" onclick="goAuth('admin')">
+        <span class="lc-icon">🛡️</span>
+        <div class="lc-label">Admin</div>
+        <div class="lc-desc">System management &amp; oversight</div>
+      </div>
+      <div class="land-card" onclick="goAuth('lecturer')">
+        <span class="lc-icon">👨‍🏫</span>
+        <div class="lc-label">Lecturer</div>
+        <div class="lc-desc">Courses &amp; attendance sessions</div>
+      </div>
+      <div class="land-card" onclick="goAuth('student')">
+        <span class="lc-icon">🎓</span>
+        <div class="lc-label">Student</div>
+        <div class="lc-desc">Submit &amp; track attendance</div>
+      </div>
+    </div>
+  </div>
+  <div class="land-footer">
+    <span style="color:rgba(255,255,255,.4);font-size:.73rem;">🔒 bcrypt password hashing</span>
+    <span></span>
+    <span style="color:rgba(255,255,255,.4);font-size:.73rem;">📱 Device-locked accounts</span>
+    <span></span>
+    <span style="color:rgba(255,255,255,.4);font-size:.73rem;">📍 GPS + WiFi verification</span>
+  </div>
+</div>
+
+<!-- ══════════════ AUTH ══════════════ -->
+<div id="s-auth" class="screen">
+  <div class="auth-wrap">
+    <div class="auth-back" onclick="goLanding()">← Back to home</div>
+    <div class="auth-box">
+      <div class="auth-role-header">
+        <div class="auth-role-icon green" id="auth-icon">👤</div>
+        <h2 class="auth-h2" id="auth-title">Sign In</h2>
+        <p class="auth-p" id="auth-desc">Access your account</p>
+      </div>
+
+      <div id="auth-notice" class="notice-box" style="display:none;"></div>
+
+      <div class="auth-tabs" id="auth-tabs">
+        <div class="auth-tab active" onclick="authTab('login')">Sign In</div>
+        <div class="auth-tab" onclick="authTab('register')">Register</div>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="f-login">
+        <div class="fg"><label>Email Address</label><input type="email" id="li-email" placeholder="your@email.oauife.edu.ng" autocomplete="email"></div>
+        <div class="fg"><label>Password</label><input type="password" id="li-pw" placeholder="Enter your password" autocomplete="current-password"></div>
+        <button class="btn btn-primary btn-full" id="btn-li" onclick="doLogin()">Sign In</button>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="f-reg" style="display:none;">
+        <!-- Step indicator -->
+        <div style="display:flex;gap:0;margin-bottom:1.2rem;border-radius:8px;overflow:hidden;border:1px solid var(--border2);">
+          <div id="step-ind-1" style="flex:1;padding:.5rem;text-align:center;font-size:.75rem;font-weight:600;background:var(--green1);color:#fff;transition:.2s;">1 · Details</div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div id="reg-step-1">
+          <div class="text-c mb-2">
+            <div class="photo-upload" id="photo-preview" onclick="document.getElementById('photo-file').click()">
+              <div style="text-align:center;color:var(--text3);font-size:.78rem;">📷<br>Upload Photo</div>
+            </div>
+            <input type="file" id="photo-file" accept="image/*" onchange="previewPhoto(this)">
+            <p class="text-xs col-3">Profile photo (required)</p>
+          </div>
+          <div class="fg"><label>Full Name</label><input type="text" id="rg-name" placeholder="e.g. Adebayo Johnson"></div>
+          <div class="fg"><label>Email Address</label><input type="email" id="rg-email" placeholder=""></div>
+
+        <!-- Student fields -->
+        <div id="rg-stu">
+          <div class="fg-row">
+            <div class="fg"><label>Reg. Number</label><input type="text" id="rg-regno" placeholder="ENG/2021/045"></div>
+            <div class="fg"><label>ID Number</label><input type="text" id="rg-idno" placeholder="210301045"></div>
+          </div>
+          <div class="fg-row">
+            <div class="fg"><label>Level</label>
+              <select id="rg-level"><option value="">Level</option><option>100</option><option>200</option><option>300</option><option>400</option><option>500</option><option>600</option></select>
+            </div>
+            <div class="fg"><label>Faculty</label>
+              <select id="rg-faculty-s" onchange="buildDeptOptions('rg-dept-s', this.value, 'Select Department')">
+                <option value="">Select Faculty</option>
+              </select>
+            </div>
+          </div>
+          <div class="fg"><label>Department</label>
+            <select id="rg-dept-s"><option value="">Select Department</option></select>
+          </div>
+        </div>
+
+        <!-- Lecturer fields -->
+        <div id="rg-lec" style="display:none;">
+          <div class="fg-row">
+            <div class="fg"><label>Faculty</label>
+              <select id="rg-faculty-l" onchange="buildDeptOptions('rg-dept-l', this.value, 'Select Department')">
+                <option value="">Select Faculty</option>
+              </select>
+            </div>
+            <div class="fg"><label>Department</label>
+              <select id="rg-dept-l"><option value="">Select Department</option></select>
+            </div>
+          </div>
+        </div>
+
+          <!-- Device fingerprint display -->
+          <div class="device-box" id="device-info-box">
+            <span>📱</span>
+            <div>
+              <div class="fw6" style="margin-bottom:.2rem;">This device will be linked to your account</div>
+              <div class="di" id="device-fp-display">Generating fingerprint...</div>
+            </div>
+          </div>
+          <div class="fg-row">
+            <div class="fg"><label>Password</label><input type="password" id="rg-pw" placeholder="Min. 8 characters" autocomplete="new-password"></div>
+            <div class="fg"><label>Confirm</label><input type="password" id="rg-pw2" placeholder="Repeat password"></div>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="regNextStep()">Create Account →</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN DASHBOARD ══════════════ -->
+<div id="s-admin" class="screen">
+  <nav class="topbar" style="background:#0D1B2A;">
+    <div class="topbar-logo"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAB4AHgDASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAAYEBQcCAwH/xABBEAACAQMCAwUFAwsDAwUAAAABAgMABBEFIRIxQQYTIlFhFDJCcYEVI5EHNVJicnSCobGy0SQzwRY0U2NzouHw/8QAGgEAAgMBAQAAAAAAAAAAAAAAAgMAAQQFBv/EAC0RAAICAQMDAgQGAwAAAAAAAAABAgMREiExBCJBE2EFMpHwFCNCcaGxUcHh/9oADAMBAAIRAxEAPwDTqKKKhCJqu2lXn/sP/aaw2wsri8aLhYpE8ixGZvdVjyzW5av+aL393k/tNZPprWFrp/DcvJBDcwqtxDMDkn4ZYz1GenSjVjhF6eQ4LLK37GvxNHE5VC87W+WfADjfB8s9POvODTLuZoV4lQzStCOJj4XX4T5E9Kk3mtzXkXdCIGSSJUlbq7qfC48jjap6aJ2g1CWWS4K2olZXkLHGWUbNgdfWjds4LNjSD0p8FNHp11KLXu2Ba6Z0VS2CGXmD61xBZXlwsJiUkTO0aeLHiUZIPltTVD2QtF/7jU5Gkz8BVcH65Oai3PZi8tbhY7K/buff8WQVLEIeXofwoF11beFL+C3W/wDBQW1jc3PsxRgFuZTFGS3UYyflvXcWmXUywGN1PfyvGmWIyF95v2R50z/9H2MaKkmozLIASN1AHmQKhz9ldTgRjp16k8bIUxxcJ4TuR5b+lUuurk9pfVE9NrwUsGl3k4tjGV/1LMI8tjwrzc/q+tfZNKvUtreUZdp43l7tfeVF+I+hqRcXeo6fctHqFtwmSJISpGMRKd1XGwzjerGPVLXUIrtpLgW01yeGTbLRwLjhjjHUnP8AWjlbasS5XsUoxexe/koJMWpkknxR/wBGrQaRvybRrFJrCxwSwIJowscp8SjhPP1p5obHmTYp8hRRRQFBRRRUIQ9Y/M19+7yf2msVacnRo4FveNfCTbzR+JD5xny/Ctp1n8y337vJ/aaxx7pZtHSOKe4kVOBTHPAHCbj3ZByHoaZB/wBhwLSDTYdPt5go45eAhnI3O3TypmvVZ5mQhWTK4VgSud+YAO3XPpVPef7c/wAj/SrPUCxumThUDAKuV4sHrt68q5dsnOSbNMVhHEmDIjnPEGxuQCCMYJHEB/KvS7kUPfmSdI2iiXgBI2HvA+uW2+lcFiSCGI8XINy8QGPodgfL5Yql7VRs2puwXIES79xx8s/F8NDXDXNRZbeEX11iS4QSnh8ALeLAXYk/ED/KuW4uMyKOCRk224Tjbn0wOm5O9d3JPtbDiPJQBxADOCR/yfwqNxN3qso4uLAXoVHUk9SR86BLYs4163iuZO7mQMvDn5fKlNIzpWryxx3sduBHnvnTiYA4OFH6X/3Thq//AHR/Y/xS3dSGHX53EhiAgQmRLfvmHy/R+dbejm9GnxgXYtxq/Jjgx6sytI4M64aUYY+E7n1p6pJ/JtKk8WqTRvM6vcKeKYgufDzOKdq1T+YzPkKKKKEoKKKKhCFrX5kv/wB2k/tNZFK8smi27P7c0eY1VpXWOPORsqD3/nWua3+Y9Q/dpP7TWMTvE2nwSRLPcyIUVriUkBDjIjRfL1o4rIcBsuLaeeG4MSZwCcnYHY16NqJlcubUqzDBVpcj+Snl0qiu9du5nZp9MZRCwiZVmYKjHpjGM7VFm1DhRnn0bCq/dsXc4DDpuvOsq6Wb+Zff1H60ME+oSiNpEEB4MEhWLNt/Fz+eM9apr4Tajc9/erP3iqFd4o8JEAAwDA8yMknHmMV6WhkntJCmk29vbyKQZZXCD6ErUJtUWBJrdnkfPhfuHAin4RsSOg5DbpTKqtLelblN55L221S7mMjXAt1ZG4HZlwCVPQhsY+tShfOOFjChw3FlJCMnpzUjbpvVKplWylmWztdSSVzJI6ScTLnods7cqgwX8MknBbaHE0mCeGNjnAGT0oPw6llpE14GqVp74SXXs5RFHABxcR6b8vnVJP3n/UkohW5aTuFI9nmEb7eWfe+VeEOrzI6PBpboyp3ylJnGUHM8txUee6bUNX9qvNOJSSHiEcTkEKB76nqRufxo6qJQbzxgkpJj7+TtjJFqkjNKxN0MmVAj+4OYGwNOVJv5OGV7LUZI7iS4RroYlkGGYcC8/wClOVMlyZ3yFFFFUUQtR1ax0xAby4VGb3EHid/ko3NV2k9qrHU9QmsSk1tcxthY5wAXGM7evpzpf1O01TSTqF4ltbOTKZDfSvlmRm2HDz8IO45YFFtoiCOeS4uZJ7i5Ku06gLwsvusmOWKVZcq/nWw2NepbDhrn5h1D92k/tNY7ZvN3FtMIx3g+5sYVGxf4pD54PXzx0FabBfS6l2X1GGcD22CGSGYDkzcBww9GGDWTabd+zF2RSbho+7gctgRFuZ/A7fOtVa1QbQMdnhl7bqsDDuh30Wnvwp19pu26+oH9B61H1e8Ntf2thEi3QtGzKrjImnb3ifPc1Mjkh0+3eeJle30xTFAeYmuWHif1Aqp7MoZ+0lq0uXPGzknqQCf60qCXdY+Ehr8Iabbs97Vw3OuytczkbQg4jj9ABVp9l6fw8Js4cfs//vM1zf6lFYSIkqE8YJBDAbDnzqXDKs0SSpnhcZGRXGssufc3t4HpRWxSX3ZuLj9p0mVrO7XJUqfC3XBpSn1OeDW4rs2qW91AcTKuwkYHfI6ZG1PkOqwTXgtkVgxJA4mAO3PbOaTe2kSx6+WUYMkSsfU7j/iuj0E5yn6du+wqxJLKLG5Xh4XscM0Km8ss/HC3+5F9N9vI1XyRKWijs3KpL9/p0md0b4oifn/PHnXWh3Ms+ntbRH/WWLG5tc/EPjT6io+pT20UUsEAElrc8NzbcLb27n3lP8xj0BrRCEoz0ff3/wBAbysj3+TRzLpV9IY1iLXZJRRgKeBc7dN6vtU7Q6XpNzFb3lxiaXkiKXIHmQOQpP7Gag+m9j7iaNBJc3F4Y7dGPvuVG59BuT8q6udFn763vbS5R7+Fmd3nXInZhuSRy8h5CquthXPEgIwctx9tbu3vIFntZo5om5OjBgaKRNIW9u7qyvLPTZrOaaUGSeJvuJI1OH4sc842yM7gg0VI5a32BksPk7sbODU7Vb3UYRc3M+TIZctwnJHCB0AxjArwvrCK1habRAUuoXUmGKXwsM7grnG4qffWEK6reafcF1gd/bIgshQFW2cEjoGyceoql0tLND3EHepFcRtbrOISqStxEoQ36QG2etYZKSnJtv8AbwaYtaUMelyqnaGFlH3Oo2xRh5sniX/4lh9Ky/VLRrDVbuzYbwysn0zt/LFal2O0yJ7OHULueW5vYy6YkO0DAkMAB19Tvg0r/lN0s2+rxalGv3d0vC58nX/Ix+FdPpFo7GzPN5kKc17NNZW9m3CIbcsVCjGSeZPmauex07faaWzY7sMZB+1wlfrsfpS7UzSLgWurWk7cklUn5Zwf61ovqUqpRRcZdyZplzZQXLAyBgcYJVsZHqORqJBq+njTnminiCQeAK0gByM4B8icVPnkaGB5EieVlGyJzY+Qpee5R7lZ2FmZh7rCJDw+Yzxbj1515ymHqLEuEapPHBbWdhZgpdQq+HxIoJwBnfkMb/OlrttKqXPd92rNKiAsR7vCSdvI7/hTdaTPPbJLJEY2YbqTn6g+R5is97V3HtHaC5w2VjxGN+oG/wDOtXw+Mp9Rl+AbXiGxXWd1LZXcV1bnEkTZGeR9D6V5Sv3krysFUuxYhRgDO9c1a9mtKbWdct7PBMfFxynyQbn/AB9a7zSj3GXI26LCLWC0jm8KWNn3r+kkuXJ+iAD61Fs7bUtehkubrUp7a3d2VIIlx4fWmPtRphs4LnVLOcL3hTvreQcSynZVC9QTgDyNUGoSXMEsFrbEXFzDA7MsbjvBI/N+HrgEkY864tqk5uS5fHsPg04l3Bf32hxRvJcC60+IKrxtGqPEnLKlcAgeRH1oqvjeXVO7tD3givLlYkWROFu6QAyMRz3wfxopvTuTj+ZyLtUU9hi7WWZeyS/jQs9nxF1Xm8LDEi/hv/DSXdS3cTWtmlxHPbwvF3chiKJ/6fG/XpsvPritSIBGDvSJf6XHaalFp10SbBXae1VhlWGDmM/s5JHmPlVWpLuxwSt+D10HVBa3a3UuEtb5u7uBnaG4U8Ofk2MZ88Ux9odIj1vR5rKTCsw4o3PwOORpVsWW9iZYbaGLR+7KqGXHfDzA6Lz+dWmi60LJYbW/uBLaSYFre8WQR0Rz59A3X50FFu+nhr7+pdsP1Iye7tprO6ltrmMxzRMVdT0NeNa/2w7Jxa7D7RbFY7+NcKx5SD9Fv+D0rJ7yzubC5e2vIXhmTmjDH19R61167FNe4o0nR7mWSzhhvABcrEpODkSLjZgevr5GvY6daFy3dEA7lQ7BT/CDj+VUGluV0+3i4SyqgcIchlP6SkZI+mVPpyqcNTdfD7UT6MkZb8eIf0rzllUlN6Hg2qSxuWtxI8UPDborTMMRJyBPr5AVlEpdpnMpy5Y8R8zneny7nkktplYyKWjPhHFxvt1wA2PkAPWkixsrnULhbaygeaZuSoM/U+Q9TXS+GV6FJsTc84PBFZ3CIpZmOAAMknyrYOxPZz7D00y3Kj224AMn6g6L/n1qP2R7GRaOVvb8pNfY8IG6xfLzPr+FWOu6w0btp2muvthH3kvNbZT8R/W8h9eVaL7k1twISbeEQdZu/tHV1t4yGt7BuJsnAknx4V/hG59SPKlWGG6uNR7m6ikLrK0skcb91MC+BxcXJ0A22IqXeWhgIW7tXbS4cqOByZFbmZmxuTnPqOfWpMVlPNew28F/Jc3M0XCkrKP9PASCzkjmTsATzP1rna3KXb5NOlRW5ddl7RZruW/QE28Cm1tSSTkA+NsnnkgDP6tFMVnbQ2dpFbW6BIolCIvkBRWmMUlhGaTy8ntULVdOh1Oya3lLKcho5F96NxyYeoqbRRFGY39rPb8emXfeQpxl7lId+NDykjH6Gd2Ubg+lEN7BbM1pDFFdmWRI7lYyBApY4yAepG5A22p/1XS7fU4FSbiSSM8UUyHDxN5g/wDHI0l6pYz2Etub2KCKW2Zjb3ax8MMpIOAxH+2cnODsTyNInX9B8J55J9hfXOnSSQabcR3sEJ4Xs5JPHF6K3l6Nt61PuLzs92gQWmqRrFN8MV0vdyKf1W6/Q0my2dzaT9xFcffRshgk7vDyvKCD4hzUHJxvyFSoNYNxbQxXMMVzGAkUveDOZMMXPlsq5+ZqoznFJrf+y5QT9i2k7EXFoCNH1FWgJ4hb3icaA+YYbj5io32J2jMnd+xWoH/k+0JeD8M5qJa3mmLZw3MEt7YCZGbggmYcJUgEcI2zkjG2+asbO4u7ppI4tY1aJ48cUcyIGAPI7rVyuhzNfwUoz4TJNv2MknXh1W/+6O7W9mndI37Te831q6X7D7N2ojU21lGfhHvOfl7zH8aUJ9Sja2uppNT1a6W2kEcqLNwczjICgZH+KjRTxfaccGmrBbxysALtU7yRuJcru3LJDD5ii9XbtX+ivTb5Ywar2iuZoT7KslhaseH2iRMzSZ6Rx9CfM/hVHL3NxZT2ECm3JX2iIzEj2pfi4875zkHPLY1JT2u/slk7yIXthdMOM7RyFdjnyBB+hrm1trvXZJQLa3uAZARLJl7e2wMHhJxxseZA28zSFKVj/YZiMEeNjLfutnFDK04lUSW0OcSuCOUp6IvU9dqd9E0ldNgcyP313OQ082McR6ADoo5AV90jSLfS424C0txJjvZ395/8AdANhVlWmEFHdCJz1BRRRRgBRRRUIFcyRpLG0ciq6MMMrDII9RRRUIUFx2YWJuPR7lrTByIHXvIc+indf4T9KoLzQb2FHWXS5MES/eWMgkXMgwzcDYbOKKKFwi2GptFbdWtol3PMZ5LRjwNFHcW0ihHUgnO3I8I5VIstThimu55tUtuKYfdwrM7qjb77jbJxsB0oooZUqSw2NjNkSGxjeBY7W5vLpngMMojtWcb+IFTgcm33NWqdm7u8mmki0oW63HCZGupuEcSnPEETJBz6iiii9NLyBKbL2x7JWscaLqEpulT3YAvdwL/AOf8AETTDGixoERQqqMBQMACiirxgW23ydUUUVZQUUUVCH//Z" alt="OAU">OAU <em>Attendance</em> — Admin</div>
+    <div class="topbar-user">
+      <div class="topbar-avatar" style="background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--gd);">A</div>
+      <div class="topbar-info">
+        <div class="topbar-name">Administrator</div>
+        <div class="topbar-role">System Admin</div>
+      </div>
+      <span class="badge-role admin">Admin</span>
+      <button class="topbar-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </nav>
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="sb-section">Dashboard</div>
+      <div class="sb-item active" onclick="adm('overview',this)"><span class="si">📊</span>Overview</div>
+      <div class="sb-item" onclick="adm('students',this)"><span class="si">🎓</span>Students</div>
+      <div class="sb-item" onclick="adm('lecturers',this)"><span class="si">👨‍🏫</span>Lecturers</div>
+      <div class="sb-item" onclick="adm('courses',this)"><span class="si">📚</span>Courses</div>
+      <div class="sb-item" onclick="adm('logs',this)"><span class="si">📋</span>Attendance Logs</div>
+      <div class="sb-section">Account</div>
+      <div class="sb-item" onclick="adm('changepw',this)"><span class="si">🔑</span>Change Password</div>
+    </div>
+    <div class="main">
+
+      <!-- Overview -->
+      <div id="adm-overview" class="panel active">
+        <div class="panel-head"><div class="panel-title">Overview</div><div class="panel-sub">System-wide statistics</div></div>
+        <div class="stats">
+          <div class="stat"><div class="stat-ico">🎓</div><div class="stat-val" id="st-stu">—</div><div class="stat-lbl">Students</div></div>
+          <div class="stat"><div class="stat-ico">👨‍🏫</div><div class="stat-val" id="st-lec">—</div><div class="stat-lbl">Lecturers</div></div>
+          <div class="stat"><div class="stat-ico">📚</div><div class="stat-val" id="st-crs">—</div><div class="stat-lbl">Courses</div></div>
+          <div class="stat"><div class="stat-ico">✅</div><div class="stat-val" id="st-att">—</div><div class="stat-lbl">Attendance Records</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head">📋 Recent Sessions</div>
+          <div id="adm-recent"></div>
+        </div>
+      </div>
+
+      <!-- Students -->
+      <div id="adm-students" class="panel">
+        <div class="panel-head flex-b"><div><div class="panel-title">Students</div><div class="panel-sub">All registered students</div></div></div>
+        <div class="card">
+          <div class="search-wrap"><input type="text" id="stu-q" placeholder="Search name, email, reg. no…" oninput="filterStudents()"></div>
+          <div class="tbl-wrap"><table><thead><tr><th></th><th>Name</th><th>Email</th><th>Reg. No.</th><th>ID No.</th><th>Dept</th><th>Level</th><th>Device</th><th>Status</th><th></th></tr></thead><tbody id="stu-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- Lecturers -->
+      <div id="adm-lecturers" class="panel">
+        <div class="panel-head"><div class="panel-title">Lecturers</div><div class="panel-sub">All registered lecturers</div></div>
+        <div class="card">
+          <div class="tbl-wrap"><table><thead><tr><th></th><th>Name</th><th>Email</th><th>Dept</th><th>Faculty</th><th>Courses</th><th>Device</th><th>Status</th><th></th></tr></thead><tbody id="lec-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- Courses -->
+      <div id="adm-courses" class="panel">
+        <div class="panel-head"><div class="panel-title">Courses</div><div class="panel-sub">All courses across faculties</div></div>
+        <div class="card">
+          <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Dept</th><th>Level</th><th>Lecturer</th><th>Enrolled</th></tr></thead><tbody id="adm-crs-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- Logs -->
+      <div id="adm-logs" class="panel">
+        <div class="panel-head"><div class="panel-title">Attendance Logs</div><div class="panel-sub">All sessions &amp; records</div></div>
+        <div class="card">
+          <div class="tbl-wrap"><table><thead><tr><th>Course</th><th>Lecturer</th><th>Date</th><th>Start</th><th>End</th><th>Present</th><th>Status</th></tr></thead><tbody id="log-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- Change PW -->
+      <div id="adm-changepw" class="panel">
+        <div class="panel-head"><div class="panel-title">Change Password</div><div class="panel-sub">Update admin account password</div></div>
+        <div class="card" style="max-width:400px;">
+          <div class="fg"><label>Current Password</label><input type="password" id="adm-pw0" placeholder="Current password"></div>
+          <div class="fg"><label>New Password</label><input type="password" id="adm-pw1" placeholder="Min. 8 characters"></div>
+          <div class="fg"><label>Confirm New Password</label><input type="password" id="adm-pw2" placeholder="Repeat new password"></div>
+          <button class="btn btn-primary" onclick="admChangePw()">Update Password</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ LECTURER DASHBOARD ══════════════ -->
+<div id="s-lecturer" class="screen">
+  <nav class="topbar">
+    <div class="topbar-logo"><img src="data:image/jpeg;base64,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" alt="OAU">OAU <em>Attendance</em></div>
+    <div class="topbar-user">
+      <div class="topbar-avatar" id="lec-av"></div>
+      <div class="topbar-info"><div class="topbar-name" id="lec-nm"></div><div class="topbar-role">Lecturer</div></div>
+      <span class="badge-role lecturer">Lecturer</span>
+      <button class="topbar-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </nav>
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="sb-section">Dashboard</div>
+      <div class="sb-item active" onclick="lec('courses',this)"><span class="si">📚</span>My Courses</div>
+      <div class="sb-item" onclick="lec('history',this)"><span class="si">📋</span>Session History</div>
+      <div class="sb-section">Account</div>
+      <div class="sb-item" onclick="lec('profile',this)"><span class="si">👤</span>Profile</div>
+      <div class="sb-item" onclick="lec('changepw',this)"><span class="si">🔑</span>Change Password</div>
+    </div>
+    <div class="main">
+
+      <!-- Courses -->
+      <div id="lec-courses" class="panel active">
+        <div class="flex-b mb-2">
+          <div class="panel-head" style="margin:0;"><div class="panel-title">My Courses</div><div class="panel-sub">Manage courses &amp; start attendance</div></div>
+          <button class="btn btn-gold btn-sm" onclick="buildFacultyOptions('mc-fac','Select Faculty');openModal('m-addcourse')">+ Add Course</button>
+        </div>
+        <div class="course-grid" id="lec-crs-grid"><div class="empty"><div class="empty-ico">📚</div><p>No courses yet. Add your first course!</p></div></div>
+      </div>
+
+      <!-- History -->
+      <div id="lec-history" class="panel">
+        <div class="panel-head"><div class="panel-title">Session History</div><div class="panel-sub">Past attendance sessions with download options</div></div>
+        <div class="card">
+          <div class="tbl-wrap"><table><thead><tr><th>Course</th><th>Date</th><th>Start</th><th>End</th><th>Present</th><th>Status</th><th>Download</th></tr></thead><tbody id="lec-hist-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <div id="lec-profile" class="panel">
+        <div class="panel-head"><div class="panel-title">Profile</div><div class="panel-sub">Update your information</div></div>
+        <div class="card" style="max-width:480px;">
+          <div class="text-c mb-2">
+            <div class="photo-upload" id="lec-ph-prev" onclick="document.getElementById('lec-ph-file').click()"></div>
+            <input type="file" id="lec-ph-file" accept="image/*" onchange="prevLecPh(this)">
+          </div>
+          <div class="fg-row">
+            <div class="fg"><label>Full Name</label><input type="text" id="lec-pr-name"></div>
+            <div class="fg"><label>Faculty</label>
+              <select id="lec-pr-fac" onchange="buildDeptOptions('lec-pr-dept', this.value, 'Select Department')"><option value="">Select Faculty</option></select>
+            </div>
+          </div>
+          <div class="fg"><label>Department</label><select id="lec-pr-dept"><option value="">Select Department</option></select></div>
+          <button class="btn btn-primary" onclick="saveLecProfile()">Save Changes</button>
+        </div>
+      </div>
+
+      <!-- Change PW -->
+      <div id="lec-changepw" class="panel">
+        <div class="panel-head"><div class="panel-title">Change Password</div></div>
+        <div class="card" style="max-width:400px;">
+          <div class="fg"><label>New Password</label><input type="password" id="lec-pw1" placeholder="Min. 8 characters"></div>
+          <div class="fg"><label>Confirm</label><input type="password" id="lec-pw2" placeholder="Repeat"></div>
+          <button class="btn btn-primary" onclick="lecChangePw()">Update Password</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ STUDENT DASHBOARD ══════════════ -->
+<div id="s-student" class="screen">
+  <nav class="topbar">
+    <div class="topbar-logo"><img src="data:image/jpeg;base64,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" alt="OAU">OAU <em>Attendance</em></div>
+    <div class="topbar-user">
+      <div class="topbar-avatar" id="stu-av"></div>
+      <div class="topbar-info"><div class="topbar-name" id="stu-nm"></div><div class="topbar-role">Student</div></div>
+      <span class="badge-role student">Student</span>
+      <button class="topbar-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </nav>
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="sb-section">Dashboard</div>
+      <div class="sb-item active" onclick="stu('mycourses',this)"><span class="si">📚</span>My Courses</div>
+      <div class="sb-item" onclick="stu('browse',this)"><span class="si">🔍</span>Browse Courses</div>
+      <div class="sb-item" onclick="stu('history',this)"><span class="si">📋</span>My Attendance</div>
+      <div class="sb-section">Account</div>
+      <div class="sb-item" onclick="stu('profile',this)"><span class="si">👤</span>Profile</div>
+      <div class="sb-item" onclick="stu('changepw',this)"><span class="si">🔑</span>Change Password</div>
+    </div>
+    <div class="main">
+
+      <div id="stu-mycourses" class="panel active">
+        <div class="panel-head"><div class="panel-title">My Courses</div><div class="panel-sub">Tap "Submit Attendance" when a session is active</div></div>
+        <div class="course-grid" id="stu-crs-grid"><div class="empty"><div class="empty-ico">📚</div><p>No courses enrolled yet.</p></div></div>
+      </div>
+
+      <div id="stu-browse" class="panel">
+        <div class="panel-head"><div class="panel-title">Browse Courses</div><div class="panel-sub">Find and enroll in available courses</div></div>
+        <div class="search-wrap"><input type="text" id="br-q" placeholder="Search by code or title…" oninput="filterBrowse()"></div>
+        <div class="course-grid" id="stu-browse-grid"></div>
+      </div>
+
+      <div id="stu-history" class="panel">
+        <div class="panel-head"><div class="panel-title">My Attendance</div><div class="panel-sub">Your personal attendance record</div></div>
+        <div class="card">
+          <div class="tbl-wrap"><table><thead><tr><th>Course</th><th>Date</th><th>Time</th><th>Distance</th><th>GPS IoD</th><th>Status</th></tr></thead><tbody id="stu-hist-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <div id="stu-profile" class="panel">
+        <div class="panel-head"><div class="panel-title">Profile</div></div>
+        <div class="card" style="max-width:480px;">
+          <div class="text-c mb-2">
+            <div class="photo-upload" id="stu-ph-prev" onclick="document.getElementById('stu-ph-file').click()"></div>
+            <input type="file" id="stu-ph-file" accept="image/*" onchange="prevStuPh(this)">
+          </div>
+          <div class="fg"><label>Full Name</label><input type="text" id="stu-pr-name" disabled></div>
+          <div class="fg"><label>Email</label><input type="email" id="stu-pr-email" disabled></div>
+          <div class="fg-row">
+            <div class="fg"><label>Reg. Number</label><input type="text" id="stu-pr-regno" disabled></div>
+            <div class="fg"><label>ID Number</label><input type="text" id="stu-pr-idno" disabled></div>
+          </div>
+          <div class="fg-row">
+            <div class="fg"><label>Department</label><input type="text" id="stu-pr-dept" disabled></div>
+            <div class="fg"><label>Level</label><input type="text" id="stu-pr-level" disabled></div>
+          </div>
+          <div class="device-box mt-2">
+            <span>📱</span>
+            <div><div class="fw6" style="margin-bottom:.2rem;">Linked Device</div><div class="di" id="stu-dev-display">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="stu-changepw" class="panel">
+        <div class="panel-head"><div class="panel-title">Change Password</div></div>
+        <div class="card" style="max-width:400px;">
+          <div class="fg"><label>New Password</label><input type="password" id="stu-pw1" placeholder="Min. 8 characters"></div>
+          <div class="fg"><label>Confirm</label><input type="password" id="stu-pw2" placeholder="Repeat"></div>
+          <button class="btn btn-primary" onclick="stuChangePw()">Update Password</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODALS ══════════════ -->
+
+<!-- Add Course -->
+<div class="overlay" id="m-addcourse">
+  <div class="modal">
+    <div class="modal-title">📚 Add New Course</div>
+    <div class="fg"><label>Course Code</label><input type="text" id="mc-code" placeholder="e.g. CIV301"></div>
+    <div class="fg"><label>Course Title</label><input type="text" id="mc-title" placeholder="e.g. Structural Engineering I"></div>
+    <div class="fg-row">
+      <div class="fg"><label>Faculty</label>
+        <select id="mc-fac" onchange="onCourseFactChange()">
+          <option value="">Select Faculty</option>
+        </select>
+      </div>
+      <div class="fg"><label>Level</label>
+        <select id="mc-level"><option value="">Level</option><option>100</option><option>200</option><option>300</option><option>400</option><option>500</option><option>600</option></select>
+      </div>
+    </div>
+    <div class="fg">
+      <label>Department</label>
+      <select id="mc-dept"><option value="">— Select Faculty first —</option></select>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('m-addcourse')">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="addCourse()">Create Course</button>
+    </div>
+  </div>
+</div>
+
+<!-- Start Session -->
+<div class="overlay" id="m-session">
+  <div class="modal">
+    <div class="modal-title">🟢 Start Attendance Session</div>
+    <p class="text-sm col-3" style="margin-bottom:1.2rem;">Your network IP and GPS will be captured. Your network IP and GPS will be captured. Students need same WiFi — GPS distance is just recorded.</p>
+    <div id="sess-status"></div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('m-session')">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="btn-start-sess" onclick="confirmSession()" disabled>Start Session</button>
+    </div>
+  </div>
+</div>
+
+<!-- Live Session -->
+<div class="overlay" id="m-live">
+  <div class="modal">
+    <div class="modal-title">📡 Live Session</div>
+    <div class="live-banner">
+      <div class="flex gap-1" style="align-items:center;"><div class="live-dot"></div><span class="fw7" id="live-cname" style="margin-left:.5rem;"></span></div>
+      <span class="mono fw6" id="live-timer">00:00</span>
+    </div>
+    <div class="stats" style="margin-bottom:1rem;">
+      <div class="stat"><div class="stat-val" id="live-count">0</div><div class="stat-lbl">Present</div></div>
+      <div class="stat"><div class="stat-val mono" style="font-size:1rem;" id="live-sid">—</div><div class="stat-lbl">Session ID</div></div>
+    </div>
+    <div id="live-stats" class="text-xs col-3 mono" style="margin-bottom:.5rem;display:none;padding:.4rem .6rem;background:var(--bg2,#f5f5f5);border-radius:6px;"></div>
+    <div id="live-warnings" style="margin-bottom:.75rem;"></div>
+    <div id="live-list" style="max-height:200px;overflow-y:auto;"></div>
+    <div class="modal-foot">
+      <button class="btn btn-danger btn-sm" onclick="endSession()">End Session</button>
+    </div>
+  </div>
+</div>
+
+<!-- Submit Attendance -->
+<div class="overlay" id="m-submit">
+  <div class="modal">
+    <div class="modal-title">✅ Submit Attendance</div>
+    <div id="sub-course-info" class="text-sm col-3 mb-2"></div>
+    <div id="sub-status"></div>
+    <div id="sub-checks" style="display:none;margin-top:1rem;">
+      <div class="check-row"><span>📡 Same WiFi Network</span><span id="chk-ip">⏳</span></div>
+      <div class="check-row"><span>📍 GPS Distance (recorded only)</span><span id="chk-gps">⏳</span></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('m-submit')">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="btn-sub-att" onclick="submitAtt()" disabled>Mark Present</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Students in Course -->
+<div class="overlay" id="m-stu-list">
+  <div class="modal">
+    <div class="modal-title" id="m-stu-list-title">Enrolled Students</div>
+    <div id="m-stu-list-body"></div>
+    <div class="modal-foot"><button class="btn btn-outline btn-sm" onclick="closeModal('m-stu-list')">Close</button></div>
+  </div>
+</div>
+
+<!-- ═══ FIREBASE SDK (v9 compat) ═══ -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script>
+// OAU Logo (compressed, shared across all uses)
+const OAU_LOGO = "data:image/jpeg;base64,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";
+
+// ═══════════════════════════════════════════════════════
+//  OAU FACULTIES & DEPARTMENTS
+// ═══════════════════════════════════════════════════════
+const OAU_FACULTIES = {
+  "Faculty of Basic Medical Sciences": ["Anatomy and Cell Biology","Medical Biochemistry","Medical Microbiology and Parasitology","Nursing Science","Physiological Sciences","Medical Rehabilitation","Morbid Anatomy and Forensic Medicine","Haematology and Immunology"],
+  "Faculty of Clinical Sciences": ["Anaesthesia","Community Health","Dermatology and Venereology","Medicine","Mental Health","Obstetrics and Gynaecology","Ophthalmology","Orthopaedics and Traumatology","Paediatrics and Child Health","Radiology","Surgery"],
+  "Faculty of Dentistry": ["Child Dental Health","Oral and Maxillofacial Surgery","Oral Pathology and Medicine","Periodontics and Orthodontics","Preventive and Community Dentistry"],
+  "Faculty of Science": ["Biochemistry and Molecular Biology","Botany","Chemistry","Geology","Mathematics","Microbiology","Physics and Engineering Physics","Zoology"],
+  "Faculty of Technology": ["Agricultural and Environmental Engineering","Chemical Engineering","Civil Engineering","Computer Science and Engineering","Electronic and Electrical Engineering","Food Science and Technology","Mechanical Engineering","Materials Science and Engineering"],
+  "Faculty of Pharmacy": ["Pharmaceutical Chemistry","Pharmaceutics","Pharmacognosy","Pharmacology","Clinical Pharmacy and Pharmacy Administration"],
+  "Faculty of Arts": ["Dramatic Arts","English","Foreign Languages","History","Linguistics and African Languages","Music","Philosophy","Religious Studies"],
+  "Faculty of Social Sciences": ["Demography and Social Statistics","Economics","Geography","Political Science","Psychology","Sociology and Anthropology"],
+  "Faculty of Administration": ["Accounting","Business Administration","International Relations","Local Government and Development Studies","Public Administration"],
+  "Faculty of Law": ["Business Law","International Law","Jurisprudence and Private Law","Public Law"],
+  "Faculty of Education": ["Adult Education and Lifelong Learning","Educational Foundations and Counselling","Educational Management","Educational Technology and Library Studies","Physical and Health Education","Science and Technology Education"],
+  "Faculty of Agriculture": ["Agricultural Economics","Agricultural Extension and Rural Development","Animal Sciences","Crop Production and Protection","Family Nutrition and Consumer Sciences","Soil Science and Land Resources Management"],
+  "Faculty of Environmental Design and Management": ["Architecture","Building","Estate Management","Fine and Applied Arts","Quantity Surveying","Surveying and Geo-informatics","Urban and Regional Planning"],
+  "Faculty of Computing Science": ["Computer Science","Cyber Security","Information Systems"]
+};
+
+// General/faculty-wide courses that all depts in the faculty can take
+// key = faculty name, value = array of course codes (or empty = no general courses)
+const FACULTY_GENERAL_COURSES = {};
+
+function buildFacultyOptions(selectId, placeholder='Select Faculty'){
+  const sel=document.getElementById(selectId);
+  if(!sel) return;
+  sel.innerHTML=`<option value="">${placeholder}</option>`;
+  Object.keys(OAU_FACULTIES).forEach(f=>{
+    const opt=document.createElement('option');
+    opt.value=f; opt.textContent=f;
+    sel.appendChild(opt);
+  });
+}
+
+function buildDeptOptions(selectId, faculty, placeholder='Select Department', includeGeneral=false){
+  const sel=document.getElementById(selectId);
+  if(!sel) return;
+  sel.innerHTML=`<option value="">${placeholder}</option>`;
+  if(!faculty||!OAU_FACULTIES[faculty]) return;
+  const depts=OAU_FACULTIES[faculty];
+  if(includeGeneral){
+    const genOpt=document.createElement('option');
+    genOpt.value='__ALL__'; genOpt.textContent='— General (All Departments in Faculty) —';
+    sel.appendChild(genOpt);
+  }
+  depts.forEach(d=>{
+    const opt=document.createElement('option');
+    opt.value=d; opt.textContent=d;
+    sel.appendChild(opt);
+  });
+}
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyCgquLvZpnODhUZZh5zymO4fowWqVXWk_Q",
+  authDomain:        "oau-attendance-system-8c765.firebaseapp.com",
+  projectId:         "oau-attendance-system-8c765",
+  storageBucket:     "oau-attendance-system-8c765.firebasestorage.app",
+  messagingSenderId: "442874527368",
+  appId:             "1:442874527368:web:f361bef0cae03faac8e93d"
+};
+let db = null, auth = null;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db   = firebase.firestore();
+  auth = firebase.auth();
+} catch(e){ console.error('Firebase init failed:',e); }
+const usersCol    = () => db ? db.collection('users')    : null;
+const coursesCol  = () => db ? db.collection('courses')  : null;
+const sessionsCol = () => db ? db.collection('sessions') : null;
+const recordsCol  = () => db ? db.collection('records')  : null;
+
+
+// ─── In-memory cache (populated from Firestore) ────────
+const DS = {
+  users: {
+    'ADMIN': {
+      uid:'ADMIN', role:'admin', name:'System Admin',
+      email:'adminoau@oauife.edu.ng',
+      password:'adminoau', active:true,
+      deviceFP: null
+    },
+    'lec-001': {
+      uid:'lec-001',role:'lecturer',name:'Prof. K. Adeyemi',
+      email:'prof.adeyemi@oauife.edu.ng',
+      password:'demo1234',dept:'Civil Engineering',faculty:'Engineering',
+      photoURL:'',active:true,deviceFP:'demo-device-lec'
+    },
+    'stu-001': {
+      uid:'stu-001',role:'student',name:'John Adebayo',
+      email:'john.doe@student.oauife.edu.ng',
+      password:'demo1234',dept:'Civil Engineering',faculty:'Engineering',
+      level:'300',regno:'ENG/2021/045',idno:'210301045',
+      enrolledCourses:['crs-001'],active:true,photoURL:'',deviceFP:'demo-device-stu'
+    }
+  },
+  courses: {
+    'crs-001':{ id:'crs-001',code:'CIV301',title:'Structural Engineering I',dept:'Civil Engineering',faculty:'Engineering',level:'300',lecUid:'lec-001',lecName:'Prof. K. Adeyemi',enrolled:['stu-001'] },
+    'crs-002':{ id:'crs-002',code:'CIV401',title:'Foundation Engineering',dept:'Civil Engineering',faculty:'Engineering',level:'400',lecUid:'lec-001',lecName:'Prof. K. Adeyemi',enrolled:[] }
+  },
+  sessions: {},
+  records: [],
+  activeSessions: {} // courseId → sessionId  (mirrored from Firestore in real-time)
+};
+
+// ─── Real-time listeners (unsubscribe handles) ─────────
+let _unsubSessions = null;
+let _unsubRecords  = null;
+
+// ╔══════════════════════════════════════════════════════╗
+// ║  SEED DEFAULT DATA (runs once if Firestore is empty) ║
+// ╚══════════════════════════════════════════════════════╝
+async function seedIfEmpty(){
+  if(!db) return;
+  const snap = await usersCol().limit(1).get();
+  if(!snap.empty) return; // already seeded
+
+  const batch = db.batch();
+
+  const adminRef = usersCol().doc('ADMIN');
+  batch.set(adminRef,{ uid:'ADMIN',role:'admin',name:'System Admin',
+    email:'adminoau@oauife.edu.ng',password:'adminoau',active:true,deviceFP:null });
+
+  const lec1Ref = usersCol().doc('lec-001');
+  batch.set(lec1Ref,{ uid:'lec-001',role:'lecturer',name:'Prof. K. Adeyemi',
+    email:'prof.adeyemi@oauife.edu.ng',password:'demo1234',dept:'Civil Engineering',
+    faculty:'Engineering',photoURL:'',active:true,deviceFP:'demo-device-lec' });
+
+  const stu1Ref = usersCol().doc('stu-001');
+  batch.set(stu1Ref,{ uid:'stu-001',role:'student',name:'John Adebayo',
+    email:'john.doe@student.oauife.edu.ng',password:'demo1234',dept:'Civil Engineering',
+    faculty:'Engineering',level:'300',regno:'ENG/2021/045',idno:'210301045',
+    enrolledCourses:['crs-001'],active:true,photoURL:'',deviceFP:'demo-device-stu' });
+
+  const crs1Ref = coursesCol().doc('crs-001');
+  batch.set(crs1Ref,{ id:'crs-001',code:'CIV301',title:'Structural Engineering I',
+    dept:'Civil Engineering',faculty:'Engineering',level:'300',
+    lecUid:'lec-001',lecName:'Prof. K. Adeyemi',enrolled:['stu-001'] });
+
+  const crs2Ref = coursesCol().doc('crs-002');
+  batch.set(crs2Ref,{ id:'crs-002',code:'CIV401',title:'Foundation Engineering',
+    dept:'Civil Engineering',faculty:'Engineering',level:'400',
+    lecUid:'lec-001',lecName:'Prof. K. Adeyemi',enrolled:[] });
+
+  await batch.commit();
+  console.log('Firestore seeded with demo data');
+}
+
+// ─── Load all users & courses into DS cache ────────────
+async function loadStaticData(){
+  const [uSnap, cSnap] = await Promise.all([
+    usersCol().get(), coursesCol().get()
+  ]);
+  DS.users   = {};
+  DS.courses = {};
+  uSnap.forEach(d=>{ DS.users[d.id]   = d.data(); });
+  cSnap.forEach(d=>{ DS.courses[d.id] = d.data(); });
+}
+
+// ─── Subscribe to live sessions (all tabs/devices) ─────
+// Fires every time any session doc changes in Firestore.
+// Students see the "Session Open" button appear instantly.
+function subscribeToSessions(){
+  if(!db) return;
+  if(_unsubSessions) _unsubSessions();
+  _unsubSessions = sessionsCol()
+    .where('active','==',true)
+    .onSnapshot(snap=>{
+      // Rebuild activeSessions map
+      DS.activeSessions = {};
+      snap.forEach(d=>{
+        const s = d.data();
+        DS.sessions[s.id] = s;
+        DS.activeSessions[s.courseId] = s.id;
+      });
+      // Also capture closed sessions we already have cached
+      // (needed for history/download)
+      if(curUser){
+        if(curUser.role==='student') renderStuCourses();
+        if(curUser.role==='lecturer') renderLecCourses();
+      }
+    }, err=>console.error('Session listener error:',err));
+}
+
+// ─── Subscribe to attendance records ──────────────────
+function subscribeToRecords(){
+  if(!db) return;
+  if(_unsubRecords) _unsubRecords();
+  _unsubRecords = recordsCol()
+    .orderBy('time','desc')
+    .onSnapshot(snap=>{
+      DS.records = [];
+      snap.forEach(d=>DS.records.push(d.data()));
+      // Update live modal if lecturer has active session
+      if(activeSession) _updateLive();
+    }, err=>console.error('Records listener error:',err));
+}
+
+// ╔══════════════════════════════════════════════════════╗
+// ║  DEVICE FINGERPRINTING                               ║
+// ╚══════════════════════════════════════════════════════╝
+async function getDeviceFingerprint() {
+  const ua  = navigator.userAgent;
+  const lang = navigator.language;
+  const tz  = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const scr = `${screen.width}x${screen.height}x${screen.colorDepth}`;
+  const cores = navigator.hardwareConcurrency || 0;
+  const mem   = navigator.deviceMemory || 0;
+  const pf    = navigator.platform || '';
+  const raw   = `${ua}|${lang}|${tz}|${scr}|${cores}|${mem}|${pf}`;
+  const buf  = new TextEncoder().encode(raw);
+  const hash = await crypto.subtle.digest('SHA-256', buf);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+let _deviceFP = null;
+async function ensureFP() {
+  if (!_deviceFP) _deviceFP = await getDeviceFingerprint();
+  return _deviceFP;
+}
+
+// ╔══════════════════════════════════════════════════════╗
+// ║  UTILITY                                             ║
+// ╚══════════════════════════════════════════════════════╝
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('s-'+id).classList.add('active'); }
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function toast(msg, type=''){
+  const c=document.getElementById('toasts');
+  const t=document.createElement('div');
+  t.className='toast '+(type||'');
+  const icons={err:'❌',warn:'⚠️',info:'ℹ️','':`✅`};
+  t.innerHTML=`<span class="toast-icon">${icons[type]||'✅'}</span><span class="toast-msg">${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>t.style.opacity='0',3500);
+  setTimeout(()=>t.remove(),3800);
+}
+
+function gid(id){ return document.getElementById(id); }
+function fmtTime(ts){ if(!ts) return '—'; return new Date(ts).toLocaleString('en-NG',{timeZone:'Africa/Lagos',hour12:true,hour:'2-digit',minute:'2-digit',day:'2-digit',month:'short',year:'numeric'}); }
+function fmtDate(ts){ if(!ts) return '—'; return new Date(ts).toLocaleDateString('en-NG',{timeZone:'Africa/Lagos',day:'2-digit',month:'short',year:'numeric'}); }
+function fmtTimeOnly(ts){ if(!ts) return '—'; return new Date(ts).toLocaleTimeString('en-NG',{timeZone:'Africa/Lagos',hour12:true,hour:'2-digit',minute:'2-digit'}); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function initials(n){ return (n||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+
+function haversine(la1,lo1,la2,lo2){
+  const R=6371000, r=d=>(d*Math.PI/180);
+  const a=Math.sin(r(la2-la1)/2)**2+Math.cos(r(la1))*Math.cos(r(la2))*Math.sin(r(lo2-lo1)/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+async function getPublicIP(){
+  try{
+    const r=await fetch('https://api.ipify.org?format=json',{cache:'no-store'});
+    if(!r.ok) return null;
+    const d=await r.json();
+    return d.ip||null;
+  } catch{ return null; }
+}
+
+// Returns subnet string from an IP e.g. "102.89.17.238" → "102.89.17"
+function ipSubnet(ip){ if(!ip) return null; const p=ip.split('.'); return p.length>=3?p.slice(0,3).join('.'):null; }
+
+// Gathers all available network fingerprint data the browser exposes
+async function getNetworkInfo(){
+  const ip = await getPublicIP();
+  const subnet = ipSubnet(ip);
+
+  // Network Information API — available in Chrome/Android, not Safari
+  let connType=null, effType=null, downlink=null, rtt=null;
+  try{
+    const nc = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if(nc){
+      connType = nc.type||null;          // 'wifi','cellular','ethernet','none','unknown'
+      effType  = nc.effectiveType||null; // '4g','3g','2g','slow-2g'
+      downlink = nc.downlink||null;      // Mbps
+      rtt      = nc.rtt||null;           // ms round-trip time
+    }
+  } catch(e){}
+
+  return { ip, subnet, connType, effType, downlink, rtt };
+}
+
+// Human-readable connection type label
+function connLabel(info){
+  if(!info.connType && !info.effType) return 'Unknown';
+  if(info.connType==='wifi') return 'WiFi';
+  if(info.connType==='cellular') return `Cellular (${info.effType||'?'})`;
+  if(info.connType==='ethernet') return 'Ethernet';
+  if(info.effType) return info.effType.toUpperCase();
+  return info.connType||'Unknown';
+}
+
+function getGPS(onProgress){
+  // Strategy for best possible browser GPS accuracy:
+  // 1. Warm-up call  — one silent request to wake the GPS chip (cold starts give terrible accuracy)
+  // 2. Accuracy gate — only accept readings ≤200m; retry up to MAX_ATTEMPTS times
+  // 3. Best-pick     — among accepted readings, return the one with the lowest accuracy radius
+  // 4. Live feedback — calls onProgress(acc, attempt, total) so UI can show a countdown
+  return new Promise(res=>{
+    if(!navigator.geolocation){ res({lat:0,lng:0,acc:9999}); return; }
+    const MAX_ATTEMPTS=8, ACC_THRESHOLD=200, DELAY=1500, TIMEOUT=25000;
+    const good=[];
+    let attempt=0;
+
+    // Step 1: warm-up — fire one request and discard result, giving the chip time to start
+    navigator.geolocation.getCurrentPosition(
+      ()=>{ setTimeout(sample, 800); },
+      ()=>{ setTimeout(sample, 800); },
+      {enableHighAccuracy:true, timeout:10000, maximumAge:0}
+    );
+
+    function sample(){
+      if(attempt>=MAX_ATTEMPTS){ finish(); return; }
+      navigator.geolocation.getCurrentPosition(
+        p=>{
+          const r={lat:p.coords.latitude, lng:p.coords.longitude, acc:p.coords.accuracy};
+          attempt++;
+          if(onProgress) onProgress(Math.round(r.acc), attempt, MAX_ATTEMPTS);
+          if(r.acc<=ACC_THRESHOLD) good.push(r);
+          // Stop early if we have 3 good readings
+          if(good.length>=3){ finish(); return; }
+          setTimeout(sample, DELAY);
+        },
+        ()=>{ attempt++; setTimeout(sample, DELAY); },
+        {enableHighAccuracy:true, timeout:TIMEOUT, maximumAge:0}
+      );
+    }
+
+    function finish(){
+      const pool = good.length ? good : [];
+      if(!pool.length){
+        // No reading passed the threshold — return best of whatever we have
+        // (caller should warn user about poor accuracy)
+        res({lat:0, lng:0, acc:9999});
+        return;
+      }
+      const best=pool.reduce((a,b)=>a.acc<=b.acc?a:b);
+      res(best);
+    }
+  });
+}
+
+// ── Multi-sample GPS: collect N readings spaced delayMs apart ──────────────
+function getGPSSamples(n=6, delayMs=1000){
+  return new Promise(res=>{
+    if(!navigator.geolocation){ res({lat:0,lng:0,acc:9999,samples:[]}); return; }
+    const samples=[];
+    let attempts=0;
+    function take(){
+      navigator.geolocation.getCurrentPosition(
+        p=>{
+          samples.push({lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy});
+          attempts++;
+          if(attempts<n) setTimeout(take,delayMs);
+          else resolve();
+        },
+        ()=>{
+          attempts++;
+          if(attempts<n && samples.length<n) setTimeout(take,delayMs);
+          else resolve();
+        },
+        {enableHighAccuracy:true,timeout:10000,maximumAge:0}
+      );
+    }
+    function resolve(){
+      if(!samples.length){ res({lat:0,lng:0,acc:9999,samples:[]}); return; }
+      const avgLat=samples.reduce((s,x)=>s+x.lat,0)/samples.length;
+      const avgLng=samples.reduce((s,x)=>s+x.lng,0)/samples.length;
+      const avgAcc=samples.reduce((s,x)=>s+x.acc,0)/samples.length;
+      res({lat:avgLat,lng:avgLng,acc:avgAcc,samples});
+    }
+    take();
+  });
+}
+
+// ── Statistical GPS verification using Index of Dispersion (σ²/μ) ──────────
+// Low IoD  → consistent cluster → genuine presence
+// High IoD → erratic readings  → possible spoofing / far away
+function computeGPSStats(samples, lecLat, lecLng, maxMeanDist=100, maxIod=5.0){
+  if(!samples||!samples.length) return {mean:9999,variance:0,stdDev:0,iod:0,verdict:'fail',distances:[],sampleCount:0};
+  const distances=samples.map(s=>haversine(s.lat,s.lng,lecLat,lecLng));
+  const n=distances.length;
+  const mean=distances.reduce((a,b)=>a+b,0)/n;
+  const variance=distances.reduce((a,b)=>a+(b-mean)**2,0)/(n>1?n-1:1);
+  const stdDev=Math.sqrt(variance);
+  const iod=mean>0 ? variance/mean : 0;
+  const withinRange=mean<=maxMeanDist;
+  const stable=iod<=maxIod;
+  let verdict;
+  if(withinRange && stable)        verdict='pass';
+  else if(withinRange && !stable)  verdict='warn';   // close but erratic — suspicious
+  else                             verdict='fail';
+  return {
+    mean:Math.round(mean), variance:Math.round(variance),
+    stdDev:Math.round(stdDev), iod:parseFloat(iod.toFixed(2)),
+    withinRange, stable, verdict,
+    distances:distances.map(d=>Math.round(d)), sampleCount:n
+  };
+}
+
+function avatarEl(user, size=30){
+  if(user&&user.photoURL) return `<div class="mini-avatar" style="width:${size}px;height:${size}px;overflow:hidden;background:none;"><img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"></div>`;
+  return `<div class="mini-avatar" style="width:${size}px;height:${size}px;font-size:${size*.3}px;">${initials(user&&user.name)}</div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  LANDING & AUTH ROUTING
+// ═══════════════════════════════════════════════════════
+let curRole = null;
+let curUser = null;
+let regPhotoFile = null;
+
+function goLanding(){ show('landing'); curRole=null; }
+function goAuth(role){
+  curRole=role;
+  const cfg={
+    admin:  {icon:'🛡️',iconClass:'gold',title:'Admin Portal',desc:'Restricted access — authorised personnel only',tabs:false,notice:'<span style="color:var(--red2);">🔒 Admin credentials are confidential.</span> Contact your system administrator if you have lost access.',noticeClass:'gold-notice'},
+    lecturer:{icon:'👨‍🏫',iconClass:'green',title:'Lecturer Portal',desc:'Sign in or create your account',tabs:true,notice:'Email must end with <strong>@oauife.edu.ng</strong>',noticeClass:''},
+    student: {icon:'🎓',iconClass:'green',title:'Student Portal',desc:'Sign in or create your account',tabs:true,notice:'Email must end with <strong>@student.oauife.edu.ng</strong>',noticeClass:''}
+  }[role];
+  gid('auth-icon').textContent=cfg.icon;
+  gid('auth-icon').className='auth-role-icon '+cfg.iconClass;
+  gid('auth-title').textContent=cfg.title;
+  gid('auth-desc').textContent=cfg.desc;
+  gid('auth-notice').innerHTML=cfg.notice;
+  gid('auth-notice').className='notice-box '+(cfg.noticeClass||'');
+  gid('auth-notice').style.display='block';
+  gid('auth-tabs').style.display=cfg.tabs?'grid':'none';
+  gid('rg-stu').style.display=role==='student'?'block':'none';
+  gid('rg-lec').style.display=role==='lecturer'?'block':'none';
+  authTab('login');
+  if(role!=='admin') ensureFP().then(fp=>{ gid('device-fp-display').textContent=fp.slice(0,32)+'…'; });
+  // Populate faculty dropdowns
+  buildFacultyOptions('rg-faculty-s','Select Faculty');
+  buildFacultyOptions('rg-faculty-l','Select Faculty');
+  show('auth');
+}
+
+function authTab(tab){
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(tab==='login'&&i===0)||(tab==='register'&&i===1)));
+  gid('f-login').style.display=tab==='login'?'block':'none';
+  gid('f-reg').style.display=tab==='register'?'block':'none';
+}
+
+function previewPhoto(inp){
+  if(inp.files&&inp.files[0]){
+    regPhotoFile=inp.files[0];
+    const reader=new FileReader();
+    reader.onload=e=>{ gid('photo-preview').innerHTML=`<img src="${e.target.result}">`; };
+    reader.readAsDataURL(inp.files[0]);
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════════════════════
+async function doLogin(){
+  const email = gid('li-email').value.trim().toLowerCase();
+  const pw    = gid('li-pw').value;
+  if(!email||!pw){ toast('Fill in all fields','err'); return; }
+  if(curRole==='admin' && email!=='adminoau@oauife.edu.ng'){ toast('Invalid admin credentials','err'); return; }
+  if(curRole==='lecturer' && !email.endsWith('@oauife.edu.ng')){ toast('Lecturer email must end with @oauife.edu.ng','err'); return; }
+  if(curRole==='student' && !email.endsWith('@student.oauife.edu.ng')){ toast('Student email must end with @student.oauife.edu.ng','err'); return; }
+
+  const btn=gid('btn-li');
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Signing in…';
+
+  try{
+    if(!db){ toast('Firebase not connected.','err'); btn.disabled=false; btn.innerHTML='Sign In'; return; }
+    const snap = await usersCol().where('email','==',email).limit(1).get();
+    if(snap.empty) throw new Error('Invalid email or password');
+    const userDoc = snap.docs[0];
+    const user = userDoc.data();
+    if(user.password!==pw) throw new Error('Invalid email or password');
+    if(user.role!==curRole) throw new Error('This account does not have that role');
+    if(!user.active) throw new Error('Account suspended. Contact admin.');
+
+    if(curRole!=='admin'){
+      const fp = await ensureFP();
+      if(user.deviceFP && user.deviceFP!=='demo-device-lec' && user.deviceFP!=='demo-device-stu' && user.deviceFP!==fp){
+        throw new Error('⚠️ This account is linked to a different device. Login not permitted.');
+      }
+    }
+
+    curUser={...user};
+    // Email verification check (skip for admin)
+    if(curRole !== 'admin' && auth){
+      try{
+        const authCred = await auth.signInWithEmailAndPassword(email, pw);
+        if(!authCred.user.emailVerified){
+          await auth.signOut();
+          throw new Error('📧 Email not verified. Check your inbox and click the link before signing in.');
+        }
+      } catch(authErr){
+        if(authErr.message && authErr.message.includes('Email not verified')) throw authErr;
+        console.warn('Email verify skipped:', authErr.code);
+      }
+    }
+    localStorage.setItem('oau_session', JSON.stringify({uid: curUser.uid, role: curUser.role}));
+    toast(`Welcome back, ${curUser.name.split(' ')[0]}! 👋`);
+    enterDashboard();
+
+  } catch(e){
+    toast(e.message||'Login failed','err');
+  } finally{
+    btn.disabled=false; btn.innerHTML='Sign In';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  REGISTER
+// ═══════════════════════════════════════════════════════
+// ── Registration state ──────────────────────────────
+
+function regGoStep(n){
+  for(let i=1;i<=4;i++){
+    const el=gid('reg-step-'+i);
+    if(el) el.style.display=(i===n)?'block':'none';
+    const ind=gid('step-ind-'+i);
+    if(ind){
+      ind.style.background = i<n?'#27a74a':i===n?'var(--green1)':'var(--bg2)';
+      ind.style.color      = i<=n?'#fff':'var(--text3)';
+    }
+  }
+  _regCurrentStep=n;
+}
+
+function regNextStep(){
+  if(_regCurrentStep===1){
+    const name=gid('rg-name').value.trim(), email=gid('rg-email').value.trim();
+    const pw=gid('rg-pw').value, pw2=gid('rg-pw2').value;
+    if(!name||!email||!pw||!pw2){ toast('Fill in all fields','err'); return; }
+    if(pw.length<8){ toast('Password must be at least 8 characters','err'); return; }
+    if(pw!==pw2){ toast('Passwords do not match','err'); return; }
+    if(curRole==='lecturer'&&!email.endsWith('@oauife.edu.ng')){ toast('Lecturer email must end with @oauife.edu.ng','err'); return; }
+    if(curRole==='student'&&!email.endsWith('@student.oauife.edu.ng')){ toast('Student email must end with @student.oauife.edu.ng','err'); return; }
+    if(curRole==='student'){
+      const regno=gid('rg-regno').value.trim(),idno=gid('rg-idno').value.trim();
+      const level=gid('rg-level').value,faculty=gid('rg-faculty-s').value,dept=gid('rg-dept-s').value.trim();
+      if(!regno||!idno||!level||!faculty||!dept){ toast('Complete all student fields','err'); return; }
+    } else {
+      if(!gid('rg-faculty-l').value||!gid('rg-dept-l').value){ toast('Complete all lecturer fields','err'); return; }
+    }
+    doRegister();
+  }
+}
+
+
+
+
+
+
+
+async function doRegister(){
+  const name  = gid('rg-name').value.trim();
+  const email = gid('rg-email').value.trim().toLowerCase();
+  const pw    = gid('rg-pw').value;
+  let extra={};
+  if(curRole==='student'){
+    extra={ regno:gid('rg-regno').value.trim(), idno:gid('rg-idno').value.trim(),
+      level:gid('rg-level').value, faculty:gid('rg-faculty-s').value,
+      dept:gid('rg-dept-s').value, enrolledCourses:[] };
+  } else {
+    extra={ faculty:gid('rg-faculty-l').value, dept:gid('rg-dept-l').value };
+  }
+  const btn=gid('btn-rg');
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Creating account…';
+  try{
+    if(!db) throw new Error('Firebase not connected.');
+    const fp = await ensureFP();
+    const emailSnap = await usersCol().where('email','==',email).limit(1).get();
+    if(!emailSnap.empty) throw new Error('An account with this email already exists');
+    // Create Firebase Auth user → sends verification email
+    let firebaseUid=null;
+    try{
+      const authUser = await auth.createUserWithEmailAndPassword(email, pw);
+      firebaseUid = authUser.user.uid;
+      await authUser.user.sendEmailVerification();
+    } catch(authErr){
+      if(authErr.code==='auth/email-already-in-use') throw new Error('An account with this email already exists');
+      console.warn('Auth warning:',authErr.message);
+    }
+    const id=firebaseUid||uid();
+    await usersCol().doc(id).set(newUser);
+    DS.users[id]=newUser;
+    toast('🎉 Account created! Check your email and click the verification link before signing in.');
+    // Reset form
+    regGoStep(1);
+    authTab('login');
+    gid('li-email').value=email;
+  } catch(e){
+    toast(e.message||'Registration failed','err');
+    btn.disabled=false; btn.innerHTML='✅ Create Account & Send Verification Email';
+  }
+}
+
+function doLogout(){
+  if(activeSession) endSession(true);
+  if(_unsubSessions){ _unsubSessions(); _unsubSessions=null; }
+  if(_unsubRecords){  _unsubRecords();  _unsubRecords=null;  }
+  clearInterval(_timerInt);
+  localStorage.removeItem('oau_session');
+  curUser=null; curRole=null; activeSession=null;
+  goLanding();
+  toast('Signed out','info');
+}
+
+// ─── Route to the right dashboard after login ──────────
+function enterDashboard(){
+  if(curUser.role==='admin')    loadAdmin();
+  else if(curUser.role==='lecturer') loadLecturer();
+  else { loadStudent(); }
+  // Subscribe to live data for everyone
+  subscribeToSessions();
+  subscribeToRecords();
+}
+
+// ═══════════════════════════════════════════════════════
+//  ADMIN DASHBOARD
+// ═══════════════════════════════════════════════════════
+function adm(panel, el){
+  document.querySelectorAll('#s-admin .panel').forEach(p=>p.classList.remove('active'));
+  gid('adm-'+panel).classList.add('active');
+  document.querySelectorAll('#s-admin .sb-item').forEach(s=>s.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(panel==='students') renderStudents();
+  if(panel==='lecturers') renderLecturers();
+  if(panel==='courses') renderAdmCourses();
+  if(panel==='logs') renderLogs();
+}
+
+async function loadAdmin(){
+  show('admin');
+  await loadStaticData();
+  if(db){
+    try{
+      const [rSnap,sSnap]=await Promise.all([recordsCol().orderBy('time','desc').get(),sessionsCol().get()]);
+      DS.records=[]; rSnap.forEach(d=>DS.records.push(d.data()));
+      sSnap.forEach(d=>{DS.sessions[d.id]=d.data();});
+    }catch(e){console.warn('Admin data:',e);}
+  }
+  renderAdmStats();
+  renderStudents();
+  renderLecturers();
+  renderAdmCourses();
+  renderLogs();
+}
+
+function renderAdmStats(){
+  const users=Object.values(DS.users);
+  gid('st-stu').textContent=users.filter(u=>u.role==='student').length;
+  gid('st-lec').textContent=users.filter(u=>u.role==='lecturer').length;
+  gid('st-crs').textContent=Object.keys(DS.courses).length;
+  gid('st-att').textContent=DS.records.length;
+  const sessions=Object.values(DS.sessions).sort((a,b)=>b.start-a.start).slice(0,5);
+  gid('adm-recent').innerHTML=sessions.length?`<div class="tbl-wrap"><table><thead><tr><th>Course</th><th>Date</th><th>Present</th><th>Status</th></tr></thead><tbody>${
+    sessions.map(s=>`<tr><td><strong>${s.cCode}</strong> — ${s.cTitle}</td><td>${fmtDate(s.start)}</td><td><span class="badge badge-green">${DS.records.filter(r=>r.sessionId===s.id&&r.status==='present').length}</span></td><td><span class="badge ${s.active?'badge-green':'badge-blue'}">${s.active?'Live':'Closed'}</span></td></tr>`).join('')
+  }</tbody></table></div>`:'<div class="empty"><div class="empty-ico">📋</div><p>No sessions yet</p></div>';
+}
+
+function renderStudents(){
+  const q=(gid('stu-q').value||'').toLowerCase();
+  const list=Object.values(DS.users).filter(u=>u.role==='student'&&(!q||u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)||(u.regno||'').toLowerCase().includes(q)));
+  const tb=gid('stu-tbody');
+  if(!list.length){ tb.innerHTML='<tr><td colspan="10" class="empty" style="padding:2rem;">No students registered</td></tr>'; return; }
+  tb.innerHTML=list.map(u=>`<tr>
+    <td>${avatarEl(u,30)}</td>
+    <td class="fw6">${u.name}</td><td class="text-sm">${u.email}</td>
+    <td class="mono text-xs">${u.regno||'—'}</td><td class="mono text-xs">${u.idno||'—'}</td>
+    <td class="text-sm">${u.dept||'—'}</td>
+    <td><span class="badge badge-blue">${u.level||'—'}L</span></td>
+    <td class="mono text-xs" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;">${(u.deviceFP||'—').slice(0,10)}…</td>
+    <td><span class="badge ${u.active?'badge-green':'badge-red'}">${u.active?'Active':'Suspended'}</span></td>
+    <td><button class="btn btn-sm ${u.active?'btn-danger':'btn-outline'}" onclick="toggleUser('${u.uid}',${u.active})">${u.active?'Suspend':'Activate'}</button></td>
+  </tr>`).join('');
+}
+
+function filterStudents(){ renderStudents(); }
+
+function renderLecturers(){
+  const list=Object.values(DS.users).filter(u=>u.role==='lecturer');
+  const tb=gid('lec-tbody');
+  if(!list.length){ tb.innerHTML='<tr><td colspan="9" class="empty" style="padding:2rem;">No lecturers registered</td></tr>'; return; }
+  tb.innerHTML=list.map(u=>{
+    const cCount=Object.values(DS.courses).filter(c=>c.lecUid===u.uid).length;
+    return `<tr>
+      <td>${avatarEl(u,30)}</td><td class="fw6">${u.name}</td><td class="text-sm">${u.email}</td>
+      <td class="text-sm">${u.dept||'—'}</td><td class="text-sm">${u.faculty||'—'}</td>
+      <td><span class="badge badge-blue">${cCount}</span></td>
+      <td class="mono text-xs">${(u.deviceFP||'—').slice(0,10)}…</td>
+      <td><span class="badge ${u.active?'badge-green':'badge-red'}">${u.active?'Active':'Suspended'}</span></td>
+      <td><button class="btn btn-sm ${u.active?'btn-danger':'btn-outline'}" onclick="toggleUser('${u.uid}',${u.active})">${u.active?'Suspend':'Activate'}</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAdmCourses(){
+  const list=Object.values(DS.courses);
+  const tb=gid('adm-crs-tbody');
+  if(!list.length){ tb.innerHTML='<tr><td colspan="6" class="empty" style="padding:2rem;">No courses yet</td></tr>'; return; }
+  tb.innerHTML=list.map(c=>`<tr>
+    <td class="mono fw6 col-g">${c.code}</td><td>${c.title}</td><td class="text-sm">${c.dept}</td>
+    <td><span class="badge badge-blue">${c.level}L</span></td>
+    <td class="text-sm">${c.lecName||'—'}</td>
+    <td><span class="badge badge-green">${(c.enrolled||[]).length}</span></td>
+  </tr>`).join('');
+}
+
+function renderLogs(){
+  const list=Object.values(DS.sessions).sort((a,b)=>(b.start||0)-(a.start||0));
+  const tb=gid('log-tbody');
+  if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty" style="padding:2rem;">No sessions yet</td></tr>'; return; }
+  tb.innerHTML=list.map(s=>{
+    const pCount=DS.records.filter(r=>r.sessionId===s.id&&r.status==='present').length;
+    return `<tr>
+      <td><span class="mono fw6">${s.cCode}</span> — ${s.cTitle}</td>
+      <td class="text-sm">${s.lecName}</td><td class="text-sm">${fmtDate(s.start)}</td>
+      <td class="text-sm">${fmtTimeOnly(s.start)}</td><td class="text-sm">${s.end?fmtTimeOnly(s.end):'—'}</td>
+      <td><span class="badge badge-green">${pCount}</span></td>
+      <td><span class="badge ${s.active?'badge-green':'badge-blue'}">${s.active?'Live':'Closed'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+async function toggleUser(uid, active){
+  await usersCol().doc(uid).update({active:!active});
+  DS.users[uid].active=!active;
+  toast(`User ${!active?'activated':'suspended'}`,!active?'':'warn');
+  renderStudents(); renderLecturers();
+}
+
+async function admChangePw(){
+  const c=gid('adm-pw0').value, n=gid('adm-pw1').value, n2=gid('adm-pw2').value;
+  if(!c||!n||!n2){ toast('Fill all fields','err'); return; }
+  if(n!==n2){ toast('Passwords do not match','err'); return; }
+  if(n.length<6){ toast('Min 6 characters','err'); return; }
+  const adm=DS.users['ADMIN'];
+  if(c!==adm.password){ toast('Incorrect current password','err'); return; }
+  await usersCol().doc('ADMIN').update({password:n});
+  DS.users['ADMIN'].password=n;
+  toast('Password updated successfully!');
+  ['adm-pw0','adm-pw1','adm-pw2'].forEach(id=>gid(id).value='');
+}
+
+// ═══════════════════════════════════════════════════════
+//  LECTURER DASHBOARD
+// ═══════════════════════════════════════════════════════
+let _lecPhFile=null;
+function lec(panel,el){
+  document.querySelectorAll('#s-lecturer .panel').forEach(p=>p.classList.remove('active'));
+  gid('lec-'+panel).classList.add('active');
+  document.querySelectorAll('#s-lecturer .sb-item').forEach(s=>s.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(panel==='history') renderLecHistory();
+}
+
+async function loadLecturer(){
+  show('lecturer');
+  await loadStaticData();
+  gid('lec-nm').textContent=curUser.name;
+  const av=gid('lec-av');
+  if(curUser.photoURL){ av.innerHTML=`<img src="${curUser.photoURL}" style="width:100%;height:100%;object-fit:cover;">`; }
+  else { av.textContent=initials(curUser.name); }
+  gid('lec-pr-name').value=curUser.name;
+  // Build faculty dropdown and set saved value
+  buildFacultyOptions('lec-pr-fac','Select Faculty');
+  gid('lec-pr-fac').value=curUser.faculty||'';
+  buildDeptOptions('lec-pr-dept', curUser.faculty||'', 'Select Department');
+  gid('lec-pr-dept').value=curUser.dept||'';
+  const ph=gid('lec-ph-prev');
+  ph.innerHTML=curUser.photoURL?`<img src="${curUser.photoURL}">`:'<div style="text-align:center;color:var(--text3);font-size:.78rem;">📷<br>Change</div>';
+  renderLecCourses();
+}
+
+function renderLecCourses(){
+  const grid=gid('lec-crs-grid');
+  const list=Object.values(DS.courses).filter(c=>c.lecUid===curUser.uid);
+  if(!list.length){ grid.innerHTML='<div class="empty"><div class="empty-ico">📚</div><p>No courses yet. Add your first!</p></div>'; return; }
+  grid.innerHTML=list.map(c=>{
+    const sid=DS.activeSessions[c.id];
+    const live=!!sid;
+    return `<div class="ccard ${live?'live':''}">
+      <div class="cc-code">${c.code}</div>
+      <div class="cc-name">${c.title}</div>
+      <div class="cc-meta">📚 ${c.dept} · Level ${c.level}L</div>
+      <div class="cc-meta">👥 ${(c.enrolled||[]).length} enrolled</div>
+      <div class="cc-foot">
+        ${live
+          ?`<span class="badge badge-green">🟢 Session Active</span>
+            <button class="btn btn-primary btn-sm" onclick="openLiveModal('${c.id}')">View Live</button>`
+          :`<button class="btn btn-outline btn-sm" onclick="showCourseStudents('${c.id}')">Students</button>
+            <button class="btn btn-gold btn-sm" onclick="startSessionFor('${c.id}')">Start Session</button>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderLecHistory(){
+  const list=Object.values(DS.sessions).filter(s=>s.lecUid===curUser.uid).sort((a,b)=>(b.start||0)-(a.start||0));
+  const tb=gid('lec-hist-tbody');
+  if(!list.length){ tb.innerHTML='<tr><td colspan="7" class="empty" style="padding:2rem;">No sessions yet</td></tr>'; return; }
+  tb.innerHTML=list.map(s=>{
+    const pCount=DS.records.filter(r=>r.sessionId===s.id&&r.status==='present').length;
+    return `<tr>
+      <td><span class="mono fw6">${s.cCode}</span> — ${s.cTitle}</td>
+      <td class="text-sm">${fmtDate(s.start)}</td><td class="text-sm">${fmtTimeOnly(s.start)}</td>
+      <td class="text-sm">${s.end?fmtTimeOnly(s.end):'Ongoing'}</td>
+      <td><span class="badge badge-green">${pCount}</span></td>
+      <td><span class="badge ${s.active?'badge-green':'badge-blue'}">${s.active?'Live':'Closed'}</span></td>
+      <td>
+        <div class="flex gap-1">
+          <button class="btn btn-outline btn-sm" onclick="downloadSheet('${s.id}','pdf')">📄 PDF</button>
+          <button class="btn btn-outline btn-sm" onclick="downloadSheet('${s.id}','csv')">📊 CSV</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function showCourseStudents(courseId){
+  const c=DS.courses[courseId];
+  gid('m-stu-list-title').textContent=`${c.code} — Enrolled Students`;
+  const enrolled=(c.enrolled||[]).map(id=>DS.users[id]).filter(Boolean);
+  const body=gid('m-stu-list-body');
+  if(!enrolled.length){ body.innerHTML='<div class="empty"><div class="empty-ico">👥</div><p>No students enrolled yet</p></div>'; }
+  else { body.innerHTML=enrolled.map(s=>`
+    <div class="flex gap-1" style="align-items:center;padding:.7rem 0;border-bottom:1px solid var(--border2);">
+      ${avatarEl(s,36)}
+      <div style="flex:1;"><div class="fw6">${s.name}</div><div class="text-xs col-3">${s.email}</div></div>
+      <div class="text-sm col-3">${s.regno||'—'}</div>
+      <span class="badge badge-blue">${s.level||'—'}L</span>
+    </div>`).join(''); }
+  openModal('m-stu-list');
+}
+
+function prevLecPh(inp){
+  if(inp.files&&inp.files[0]){ _lecPhFile=inp.files[0]; const r=new FileReader(); r.onload=e=>gid('lec-ph-prev').innerHTML=`<img src="${e.target.result}">`; r.readAsDataURL(inp.files[0]); }
+}
+async function saveLecProfile(){
+  const name=gid('lec-pr-name').value.trim();
+  if(!name){ toast('Name cannot be empty','err'); return; }
+  const updates={name, faculty:gid('lec-pr-fac').value, dept:gid('lec-pr-dept').value};
+  await usersCol().doc(curUser.uid).update(updates);
+  Object.assign(DS.users[curUser.uid], updates);
+  Object.assign(curUser, updates);
+  gid('lec-nm').textContent=name;
+  toast('Profile updated!');
+}
+async function lecChangePw(){
+  const n=gid('lec-pw1').value, n2=gid('lec-pw2').value;
+  if(n.length<6){ toast('Min 6 characters','err'); return; }
+  if(n!==n2){ toast('Passwords do not match','err'); return; }
+  await usersCol().doc(curUser.uid).update({password:n});
+  DS.users[curUser.uid].password=n;
+  toast('Password updated!');
+  gid('lec-pw1').value=''; gid('lec-pw2').value='';
+}
+
+async function addCourse(){
+  const code=gid('mc-code').value.trim().toUpperCase();
+  const title=gid('mc-title').value.trim();
+  const deptVal=gid('mc-dept').value;
+  const level=gid('mc-level').value;
+  const fac=gid('mc-fac').value;
+  if(!code||!title||!deptVal||!level||!fac){ toast('Fill all fields','err'); return; }
+  const isGeneral=(deptVal==='__ALL__');
+  const dept=isGeneral?'General (All Departments)':deptVal;
+  const id='crs-'+uid();
+  const course={id,code,title,dept,faculty:fac,level,isGeneral:isGeneral,lecUid:curUser.uid,lecName:curUser.name,enrolled:[]};
+  await coursesCol().doc(id).set(course);
+  DS.courses[id]=course;
+  closeModal('m-addcourse');
+  ['mc-code','mc-title'].forEach(i=>gid(i).value='');
+  gid('mc-level').value=''; gid('mc-fac').value=''; gid('mc-dept').innerHTML='<option value="">— Select Faculty first —</option>';
+  toast(`Course ${code} created!`);
+  renderLecCourses();
+}
+
+// ═══════════════════════════════════════════════════════
+//  SESSION MANAGEMENT  (Firestore-backed, real-time)
+// ═══════════════════════════════════════════════════════
+let activeSession=null, _capIP=null, _capGPS=null, _sessCourseId=null;
+let _timerInt=null, _pollInt=null;
+
+async function startSessionFor(courseId){
+  _sessCourseId=courseId;
+  _capIP=null; _capGPS=null; _capNet=null;
+  gid('btn-start-sess').disabled=true;
+  gid('sess-status').innerHTML=`<div class="vbox checking"><div class="vbox-ico">📡</div><h3>Detecting Network…</h3><p>Fetching your public IP address</p></div>`;
+  openModal('m-session');
+  try{
+    _capNet=await getNetworkInfo();
+    _capIP=_capNet.ip;
+    gid('sess-status').innerHTML=`<div class="vbox checking"><div class="vbox-ico">📍</div><h3>Getting GPS Location…</h3>
+      <p>Warming up GPS chip, then sampling for best fix. Move near a window for better accuracy. Please stay still.</p>
+      <p id="gps-prog" style="margin-top:.4rem;font-weight:600;color:var(--accent)">Starting warm-up…</p></div>`;
+    _capGPS=await getGPS((acc,attempt,total)=>{
+      const bar='█'.repeat(attempt)+'░'.repeat(total-attempt);
+      const qual=acc<=20?'🟢 Excellent':acc<=50?'🟢 Good':acc<=150?'🟡 Fair':acc<=300?'🟠 Poor':'🔴 Very poor';
+      gid('gps-prog').textContent=`[${bar}] Reading ${attempt}/${total} — ±${acc}m ${qual}`;
+    });
+    const gpsQuality=_capGPS.acc<=50?'Excellent':_capGPS.acc<=150?'Good':_capGPS.acc<=300?'Fair':'Poor — consider moving near a window';
+    gid('sess-status').innerHTML=`
+      <div class="vbox ok"><div class="vbox-ico">✅</div><h3>Ready to Start</h3><p>Network and GPS captured successfully</p></div>
+      <div class="card" style="margin-top:.8rem;padding:.85rem 1rem;">
+        <div class="flex-b text-sm"><span>📡 Public IP</span><span class="mono fw6">${_capNet.ip||'Unavailable'}</span></div>
+        <div class="flex-b text-sm" style="margin-top:.4rem;"><span>🌐 Subnet</span><span class="mono">${_capNet.subnet||'N/A'}</span></div>
+        <div class="flex-b text-sm" style="margin-top:.4rem;"><span>📶 Connection</span><span class="mono">${connLabel(_capNet)}${_capNet.downlink?` · ${_capNet.downlink}Mbps`:''}</span></div>
+        <div class="flex-b text-sm" style="margin-top:.4rem;"><span>⏱ RTT</span><span class="mono">${_capNet.rtt!=null?_capNet.rtt+'ms':'N/A'}</span></div>
+        <div class="flex-b text-sm" style="margin-top:.4rem;border-top:1px solid var(--border);padding-top:.4rem;"><span>📍 GPS</span><span class="mono">${_capGPS.lat.toFixed(5)}, ${_capGPS.lng.toFixed(5)}</span></div>
+        <div class="flex-b text-sm" style="margin-top:.4rem;"><span>🎯 Accuracy</span><span class="mono fw6">±${Math.round(_capGPS.acc)}m — ${gpsQuality}</span></div>
+      </div>`;
+    gid('btn-start-sess').disabled=false;
+  } catch(e){
+    gid('sess-status').innerHTML=`<div class="vbox fail"><div class="vbox-ico">❌</div><h3>${e instanceof GeolocationPositionError?'GPS Denied':'Network Error'}</h3><p>${e instanceof GeolocationPositionError?'Enable location access in your browser settings.':e.message}</p></div>`;
+  }
+}
+
+async function confirmSession(){
+  if(!_capIP||!_capGPS) return;
+  const btn=gid('btn-start-sess');
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Starting…';
+  try{
+    const c=DS.courses[_sessCourseId];
+    const id=uid();
+    const sess={
+      id, courseId:_sessCourseId, cCode:c.code, cTitle:c.title,
+      lecUid:curUser.uid, lecName:curUser.name,
+      lecIP:_capIP, lecSubnet:(_capNet&&_capNet.subnet)||null,
+      lecConn:(_capNet&&_capNet.connType)||null, lecEff:(_capNet&&_capNet.effType)||null,
+      lecLat:_capGPS.lat, lecLng:_capGPS.lng, lecGpsAcc:Math.round(_capGPS.acc),
+      start:Date.now(), end:null, active:true
+    };
+    // ★ Write to Firestore → triggers real-time listener on ALL student devices
+    await sessionsCol().doc(id).set(sess);
+    DS.sessions[id]=sess;
+    DS.activeSessions[_sessCourseId]=id;
+    activeSession=sess;
+    closeModal('m-session');
+    openLiveModal(_sessCourseId);
+    renderLecCourses();
+    toast('Session started! 🟢 Students can now submit attendance.');
+  } catch(e){
+    toast('Failed to start session: '+e.message,'err');
+  } finally{
+    btn.disabled=false; btn.innerHTML='Start Session';
+  }
+}
+
+function openLiveModal(courseId){
+  const sid=DS.activeSessions[courseId];
+  if(!sid) return;
+  const sess=DS.sessions[sid];
+  activeSession=sess;
+  gid('live-cname').textContent=`${sess.cCode} — ${sess.cTitle}`;
+  gid('live-sid').textContent=sess.id.slice(0,6).toUpperCase();
+  openModal('m-live');
+  _updateLive();
+  clearInterval(_timerInt);
+  _timerInt=setInterval(()=>{
+    const el=Math.floor((Date.now()-sess.start)/1000);
+    const m=String(Math.floor(el/60)).padStart(2,'0'), s=String(el%60).padStart(2,'0');
+    gid('live-timer').textContent=`${m}:${s}`;
+  },1000);
+}
+
+function _updateLive(){
+  if(!activeSession) return;
+  const recs=DS.records.filter(r=>r.sessionId===activeSession.id&&r.status==='present');
+  gid('live-count').textContent=recs.length;
+
+  // ── Statistical outlier detection (z-score on distances) ──
+  const Z_THRESHOLD = 2;          // flag students > 2σ from the mean
+  const MIN_SAMPLES = 3;          // need at least 3 students for stats
+  const MIN_SPREAD  = 15;         // ignore tight clusters (<15m std dev) — GPS noise
+
+  const dists = recs.map(r=>Number(r.dist)).filter(d=>!isNaN(d));
+  let mean=0, stdDev=0, canFlag=false;
+  if(dists.length >= MIN_SAMPLES){
+    mean = dists.reduce((a,b)=>a+b,0)/dists.length;
+    const variance = dists.reduce((a,b)=>a+(b-mean)*(b-mean),0)/(dists.length-1);
+    stdDev = Math.sqrt(variance);
+    canFlag = stdDev >= MIN_SPREAD;
+  }
+
+  // Stats strip
+  const statsEl = gid('live-stats');
+  if(dists.length >= MIN_SAMPLES){
+    statsEl.style.display='block';
+    statsEl.innerHTML = `μ ${mean.toFixed(1)}m · σ ${stdDev.toFixed(1)}m · n=${dists.length}` +
+      (canFlag ? ` · outlier threshold ±${(Z_THRESHOLD*stdDev).toFixed(0)}m` : ` · spread too small to flag outliers`);
+  } else {
+    statsEl.style.display='none';
+    statsEl.innerHTML='';
+  }
+
+  // Compute z-scores & flag outliers
+  const flagged = [];
+  const enriched = recs.map(r=>{
+    const d = Number(r.dist);
+    let z = 0, isOutlier = false;
+    if(canFlag && !isNaN(d)){
+      z = (d - mean) / stdDev;
+      if(z > Z_THRESHOLD) isOutlier = true;  // only flag students FURTHER than average
+    }
+    if(isOutlier) flagged.push({rec:r, z});
+    return {rec:r, z, isOutlier};
+  });
+
+  // Warnings panel
+  const warnEl = gid('live-warnings');
+  if(flagged.length){
+    warnEl.innerHTML = `
+      <div style="border:1px solid #e0a800;background:#fff8e1;border-radius:8px;padding:.6rem .75rem;">
+        <div class="fw7" style="color:#a86b00;margin-bottom:.4rem;">⚠️ ${flagged.length} suspicious submission${flagged.length>1?'s':''} (GPS far from class average)</div>
+        ${flagged.map(({rec,z})=>`
+          <div class="flex gap-1" style="align-items:center;padding:.35rem 0;border-top:1px dashed #e0c97a;">
+            <strong style="flex:1;font-size:.85rem;">${rec.stuName}</strong>
+            <span class="badge badge-red">${rec.dist}m</span>
+            <span class="mono text-xs col-3">z=${z.toFixed(2)}</span>
+            <button class="btn btn-danger btn-sm" style="padding:.2rem .55rem;font-size:.75rem;" onclick="unmarkStudent('${rec.id}')">Unmark</button>
+          </div>`).join('')}
+      </div>`;
+  } else {
+    warnEl.innerHTML='';
+  }
+
+  // Main list
+  const ll=gid('live-list');
+  ll.innerHTML=enriched.map(({rec:r,z,isOutlier})=>`
+    <div class="flex gap-1" style="align-items:center;padding:.5rem 0;border-bottom:1px solid var(--border2);font-size:.85rem;${isOutlier?'background:#fff8e1;':''}">
+      <span>${isOutlier?'⚠️':'✅'}</span><strong style="flex:1;">${r.stuName}</strong>
+      <span class="mono text-xs col-3">${fmtTimeOnly(r.time)}</span>
+      <span class="badge ${isOutlier?'badge-red':'badge-green'}">${r.dist}m</span>
+      ${canFlag?`<span class="mono text-xs col-3">${isOutlier?'z='+z.toFixed(2):'—'}</span>`:''}
+      ${r.gpsIod!=null?`<span class="badge badge-blue">IoD ${r.gpsIod}</span>`:""}
+      ${isOutlier?`<button class="btn btn-danger btn-sm" style="padding:.15rem .5rem;font-size:.7rem;" onclick="unmarkStudent('${r.id}')">Unmark</button>`:''}
+    </div>`).join('');
+}
+
+// Remove a flagged (or any) student's attendance record
+async function unmarkStudent(recId){
+  const rec = DS.records.find(r=>r.id===recId);
+  if(!rec){ toast('Record not found','err'); return; }
+  if(!confirm(`Unmark ${rec.stuName}? Their attendance for this session will be removed.`)) return;
+  try{
+    await recordsCol().doc(recId).delete();
+    DS.records = DS.records.filter(r=>r.id!==recId);
+    toast(`${rec.stuName} unmarked.`,'info');
+    _updateLive();
+  } catch(e){
+    toast('Failed to unmark: '+e.message,'err');
+  }
+}
+
+async function endSession(silent=false){
+  if(!activeSession) return;
+  const sessId=activeSession.id;
+  const courseId=activeSession.courseId;
+  try{
+    // ★ Update Firestore → listener removes it from activeSessions on all devices
+    await sessionsCol().doc(sessId).update({active:false, end:Date.now()});
+    DS.sessions[sessId].active=false;
+    DS.sessions[sessId].end=Date.now();
+    delete DS.activeSessions[courseId];
+  } catch(e){ console.error('endSession error:',e); }
+  clearInterval(_timerInt);
+  activeSession=null;
+  closeModal('m-live');
+  if(!silent) toast('Session ended','info');
+  renderLecCourses();
+  renderLecHistory();
+}
+
+// ═══════════════════════════════════════════════════════
+//  DOWNLOAD ATTENDANCE SHEET
+// ═══════════════════════════════════════════════════════
+function downloadSheet(sessionId, format){
+  const sess=DS.sessions[sessionId];
+  if(!sess){ toast('Session not found','err'); return; }
+  const recs=DS.records.filter(r=>r.sessionId===sessionId&&r.status==='present');
+
+  if(format==='csv'){
+    const rows=[
+      ['OAU Smart Attendance System'],[''],
+      ['Course Code',sess.cCode],['Course Title',sess.cTitle],
+      ['Lecturer',sess.lecName],['Date',fmtDate(sess.start)],
+      ['Start Time',fmtTimeOnly(sess.start)],['End Time',sess.end?fmtTimeOnly(sess.end):'Ongoing'],
+      ['Total Present',recs.length],[''],
+      ['S/N','Student Name','Reg. Number','ID Number','Department','Level','Time Submitted','Distance (m)']
+    ];
+    recs.forEach((r,i)=>{
+      const u=DS.users[r.stuId]||{};
+      rows.push([i+1,r.stuName,u.regno||'—',u.idno||'—',u.dept||'—',u.level||'—',fmtTimeOnly(r.time),r.dist||'—']);
+    });
+    const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    triggerDownload(blob,`Attendance_${sess.cCode}_${fmtDate(sess.start).replace(/ /g,'-')}.csv`);
+    toast('CSV downloaded!');
+
+  } else if(format==='pdf'){
+    const tableRows=recs.map((r,i)=>{
+      const u=DS.users[r.stuId]||{};
+      return `<tr><td>${i+1}</td><td>${r.stuName}</td><td>${u.regno||'—'}</td><td>${u.idno||'—'}</td><td>${u.dept||'—'}</td><td>${u.level||'—'}L</td><td>${fmtTimeOnly(r.time)}</td><td>${r.dist||'—'}m</td></tr>`;
+    }).join('');
+    const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Attendance — ${sess.cCode}</title>
+    <style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Segoe UI',sans-serif;padding:2cm;color:#1a1a1a;font-size:11pt;}
+    .header{display:flex;align-items:center;gap:1rem;border-bottom:3px solid #1B4D2E;padding-bottom:1rem;margin-bottom:1.5rem;}
+    .seal{width:60px;height:60px;border-radius:50%;background:#1B4D2E;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:1rem;}
+    .uni h1{font-size:1.1rem;color:#1B4D2E;font-weight:700;}.uni p{font-size:.8rem;color:#4a5568;}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:.4rem 2rem;margin-bottom:1.5rem;background:#f0f7f2;padding:1rem;border-radius:6px;border:1px solid #c5dbc9;}
+    .meta-row{display:flex;gap:.5rem;font-size:.88rem;}.meta-label{font-weight:700;color:#1B4D2E;min-width:90px;}
+    h2{font-size:1rem;color:#1B4D2E;margin-bottom:.75rem;border-left:4px solid #C89B2A;padding-left:.6rem;}
+    table{width:100%;border-collapse:collapse;font-size:.82rem;}
+    th{background:#1B4D2E;color:white;padding:.5rem .6rem;text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;}
+    td{padding:.45rem .6rem;border-bottom:1px solid #e8e0d0;}tr:nth-child(even) td{background:#f9f9f9;}
+    .footer{margin-top:2rem;border-top:1px solid #d4c9b0;padding-top:1rem;font-size:.8rem;color:#718096;display:flex;justify-content:space-between;}
+    @media print{body{padding:1cm;}}</style></head><body>
+    <div class="header"><div class="seal">OAU</div><div class="uni"><h1>Obafemi Awolowo University, Ile-Ife</h1><p>Smart Attendance System — Official Record</p></div></div>
+    <div class="meta">
+      <div><div class="meta-row"><span class="meta-label">Course Code:</span><span>${sess.cCode}</span></div></div>
+      <div><div class="meta-row"><span class="meta-label">Lecturer:</span><span>${sess.lecName}</span></div></div>
+      <div><div class="meta-row"><span class="meta-label">Course Title:</span><span>${sess.cTitle}</span></div></div>
+      <div><div class="meta-row"><span class="meta-label">Date:</span><span>${fmtDate(sess.start)}</span></div></div>
+      <div><div class="meta-row"><span class="meta-label">Start Time:</span><span>${fmtTimeOnly(sess.start)}</span></div></div>
+      <div><div class="meta-row"><span class="meta-label">End Time:</span><span>${sess.end?fmtTimeOnly(sess.end):'Ongoing'}</span></div></div>
+    </div>
+    <h2>Attendance Record — <span style="font-size:1.1rem;font-weight:700;color:#1B4D2E;">${recs.length} Students Present</span></h2>
+    <table><thead><tr><th>#</th><th>Student Name</th><th>Reg. Number</th><th>ID Number</th><th>Department</th><th>Level</th><th>Time</th><th>Distance</th></tr></thead>
+    <tbody>${tableRows||'<tr><td colspan="8" style="text-align:center;padding:1rem;color:#718096;">No students marked present</td></tr>'}</tbody></table>
+    <div class="footer"><span>Generated: ${new Date().toLocaleString('en-NG',{timeZone:'Africa/Lagos'})}</span><span>OAU Smart Attendance · GPS &amp; WiFi Verified</span></div>
+    <script>window.onload=()=>window.print();<\/script></body></html>`;
+    const w=window.open('','_blank'); w.document.write(html); w.document.close();
+    toast('PDF print dialog opened!');
+  }
+}
+
+function triggerDownload(blob, filename){
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click(); URL.revokeObjectURL(a.href);
+}
+
+// ═══════════════════════════════════════════════════════
+//  STUDENT DASHBOARD
+// ═══════════════════════════════════════════════════════
+let _stuPhFile=null;
+function stu(panel,el){
+  document.querySelectorAll('#s-student .panel').forEach(p=>p.classList.remove('active'));
+  gid('stu-'+panel).classList.add('active');
+  document.querySelectorAll('#s-student .sb-item').forEach(s=>s.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(panel==='browse') renderBrowse();
+  if(panel==='history') renderStuHistory();
+}
+
+async function loadStudent(){
+  show('student');
+  await loadStaticData();
+  // Refresh curUser from Firestore (so enrolledCourses is up to date after reload)
+  const uDoc = await usersCol().doc(curUser.uid).get();
+  if(uDoc.exists) { curUser = {...curUser, ...uDoc.data()}; DS.users[curUser.uid]=curUser; }
+
+  gid('stu-nm').textContent=curUser.name;
+  const av=gid('stu-av');
+  if(curUser.photoURL){ av.innerHTML=`<img src="${curUser.photoURL}" style="width:100%;height:100%;object-fit:cover;">`; }
+  else { av.textContent=initials(curUser.name); }
+  gid('stu-pr-name').value=curUser.name;
+  gid('stu-pr-email').value=curUser.email;
+  gid('stu-pr-regno').value=curUser.regno||'';
+  gid('stu-pr-idno').value=curUser.idno||'';
+  gid('stu-pr-dept').value=curUser.dept||'';
+  gid('stu-pr-level').value=(curUser.level||'')+'L';
+  ensureFP().then(fp=>{ gid('stu-dev-display').textContent=fp.slice(0,32)+'… ('+navigator.platform+')'; });
+  const ph=gid('stu-ph-prev');
+  ph.innerHTML=curUser.photoURL?`<img src="${curUser.photoURL}">`:'<div style="text-align:center;color:var(--text3);font-size:.78rem;">📷<br>Change</div>';
+  renderStuCourses();
+}
+
+// ★ This function is called automatically by the Firestore
+// real-time session listener whenever a session goes live or ends.
+// Students see the button appear/disappear instantly on their own devices.
+function renderStuCourses(){
+  const grid=gid('stu-crs-grid');
+  const enrolled=curUser.enrolledCourses||[];
+  if(!enrolled.length){ grid.innerHTML='<div class="empty"><div class="empty-ico">📚</div><p>No courses enrolled yet. Browse to enroll!</p></div>'; return; }
+  const list=enrolled.map(id=>DS.courses[id]).filter(Boolean);
+  grid.innerHTML=list.map(c=>{
+    const sid=DS.activeSessions[c.id]; // populated from Firestore listener
+    const live=!!sid;
+    return `<div class="ccard ${live?'live':''}">
+      <div class="cc-code">${c.code}</div>
+      <div class="cc-name">${c.title}</div>
+      <div class="cc-meta">📚 ${c.dept} · Level ${c.level}L</div>
+      <div class="cc-meta">👨‍🏫 ${c.lecName}</div>
+      <div class="cc-foot">
+        ${live
+          ?`<span class="badge badge-green">🟢 Session Open</span>
+            <button class="btn btn-primary btn-sm" onclick="openSubmitModal('${c.id}')">Submit Attendance</button>`
+          :`<span class="badge badge-gray">No active session</span>
+            <button class="btn btn-ghost btn-sm" onclick="unenroll('${c.id}')">Unenroll</button>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderBrowse(){
+  const q=(gid('br-q').value||'').toLowerCase();
+  const enrolled=curUser.enrolledCourses||[];
+  const stuLevel=String(curUser.level||'');
+  const stuDept=curUser.dept||'';
+  const stuFaculty=curUser.faculty||'';
+
+  const list=Object.values(DS.courses).filter(c=>{
+    if(enrolled.includes(c.id)) return false;
+    // Level filter
+    if(stuLevel && String(c.level)!==stuLevel) return false;
+    // Dept/faculty filter: show dept-specific courses OR general (faculty-wide) courses in same faculty
+    const deptMatch=stuDept && c.dept===stuDept;
+    const generalMatch=c.isGeneral && stuFaculty && c.faculty===stuFaculty;
+    if(stuDept && !deptMatch && !generalMatch) return false;
+    // Text search
+    if(q && !c.code.toLowerCase().includes(q) && !c.title.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  const grid=gid('stu-browse-grid');
+  if(!list.length){
+    grid.innerHTML='<div class="empty"><div class="empty-ico">🔍</div><p>No courses found for your level and department.</p></div>'; return;
+  }
+  grid.innerHTML=list.map(c=>`
+    <div class="ccard">
+      <div class="cc-code">${c.code}</div><div class="cc-name">${c.title}</div>
+      <div class="cc-meta">📚 ${c.dept} · Level ${c.level}L</div>
+      <div class="cc-meta">👨‍🏫 ${c.lecName}</div>
+      <div class="cc-foot">
+        <span class="badge badge-blue">${(c.enrolled||[]).length} enrolled</span>
+        <button class="btn btn-gold btn-sm" onclick="enroll('${c.id}')">Enroll</button>
+      </div>
+    </div>`).join('');
+}
+
+function onCourseFactChange(){
+  const fac=gid('mc-fac').value;
+  buildDeptOptions('mc-dept', fac, '— Select Department —', true);
+}
+
+function filterBrowse(){ renderBrowse(); }
+
+async function enroll(courseId){
+  if(!curUser.enrolledCourses) curUser.enrolledCourses=[];
+  curUser.enrolledCourses.push(courseId);
+  const updatedList=[...new Set([...(DS.users[curUser.uid].enrolledCourses||[]),courseId])];
+  await usersCol().doc(curUser.uid).update({enrolledCourses:updatedList});
+  DS.users[curUser.uid].enrolledCourses=updatedList;
+  const prevEnrolled=DS.courses[courseId].enrolled||[];
+  if(!prevEnrolled.includes(curUser.uid)){
+    const newEnrolled=[...prevEnrolled,curUser.uid];
+    await coursesCol().doc(courseId).update({enrolled:newEnrolled});
+    DS.courses[courseId].enrolled=newEnrolled;
+  }
+  toast(`Enrolled in ${DS.courses[courseId].code}!`);
+  renderStuCourses(); renderBrowse();
+}
+
+async function unenroll(courseId){
+  curUser.enrolledCourses=(curUser.enrolledCourses||[]).filter(id=>id!==courseId);
+  await usersCol().doc(curUser.uid).update({enrolledCourses:curUser.enrolledCourses});
+  DS.users[curUser.uid].enrolledCourses=curUser.enrolledCourses;
+  const newEnrolled=(DS.courses[courseId].enrolled||[]).filter(id=>id!==curUser.uid);
+  await coursesCol().doc(courseId).update({enrolled:newEnrolled});
+  DS.courses[courseId].enrolled=newEnrolled;
+  toast(`Unenrolled from ${DS.courses[courseId].code}`,'info');
+  renderStuCourses();
+}
+
+function renderStuHistory(){
+  const recs=DS.records.filter(r=>r.stuId===curUser.uid);
+  const tb=gid('stu-hist-tbody');
+  if(!recs.length){ tb.innerHTML='<tr><td colspan="5" class="empty" style="padding:2rem;">No attendance records yet</td></tr>'; return; }
+  tb.innerHTML=recs.sort((a,b)=>b.time-a.time).map(r=>`<tr>
+    <td><span class="mono fw6">${r.cCode}</span> — ${r.cTitle}</td>
+    <td class="text-sm">${fmtDate(r.time)}</td><td class="text-sm">${fmtTimeOnly(r.time)}</td>
+    <td><span class="badge badge-green">${r.dist}m</span></td>
+    <td><span class="badge badge-blue" title="Index of Dispersion">${r.gpsIod!=null?'IoD '+r.gpsIod:'—'}</span></td>
+    <td><span class="badge badge-green">Present</span></td>
+  </tr>`).join('');
+}
+
+// ── Submit Attendance ────────────────────────────────────
+let _pendingCourseId=null, _canSubmit=false;
+
+async function openSubmitModal(courseId){
+  _pendingCourseId=courseId; _canSubmit=false;
+  const c=DS.courses[courseId];
+  gid('sub-course-info').textContent=`${c.code} — ${c.title} · Lecturer: ${c.lecName}`;
+  gid('sub-status').innerHTML=`<div class="vbox checking"><div class="vbox-ico">🔍</div><h3>Verifying…</h3><p>Checking your network and GPS against the lecturer's session</p></div>`;
+  gid('sub-checks').style.display='none';
+  gid('btn-sub-att').disabled=true;
+  gid('chk-ip').textContent='⏳'; gid('chk-gps').textContent='⏳';
+  openModal('m-submit');
+
+  try{
+    const sid=DS.activeSessions[courseId];
+    if(!sid) throw new Error('No active session found for this course');
+
+    // Fetch session fresh from Firestore to get lecturer's IP & GPS
+    const sessDoc = await sessionsCol().doc(sid).get();
+    if(!sessDoc.exists||!sessDoc.data().active) throw new Error('Session has ended');
+    const sess=sessDoc.data();
+
+    // Check already submitted
+    const alreadySnap=await recordsCol()
+      .where('sessionId','==',sid).where('stuId','==',curUser.uid).limit(1).get();
+    if(!alreadySnap.empty){
+      gid('sub-status').innerHTML=`<div class="vbox checking"><div class="vbox-ico">ℹ️</div><h3>Already Submitted</h3><p>You have already marked attendance for this session.</p></div>`;
+      return;
+    }
+
+    const stuNet=await getNetworkInfo();
+    const stuIP=stuNet.ip;
+    const ipUnavailable=(!stuIP||!sess.lecIP);
+    const ipMatch=(!ipUnavailable && stuIP===sess.lecIP);
+    const subnetMatch=(!!(stuNet.subnet && sess.lecSubnet) && stuNet.subnet===sess.lecSubnet);
+    const sameConnType=(!!(stuNet.connType && sess.lecConn) && stuNet.connType===sess.lecConn);
+
+    if(ipUnavailable){
+      gid('chk-ip').innerHTML='<span class="badge badge-gold">⚠️ Network check unavailable</span>';
+    } else if(ipMatch){
+      const extras=[];
+      if(subnetMatch) extras.push('subnet ✓');
+      if(sameConnType) extras.push(connLabel(stuNet)+' ✓');
+      gid('chk-ip').innerHTML=`<span class="badge badge-green">✅ Same Network${extras.length?' ('+extras.join(', ')+')':''}</span>`;
+    } else {
+      gid('chk-ip').innerHTML='<span class="badge badge-red">❌ Different network</span>';
+    }
+
+    // ── GPS with warm-up + accuracy gating ──────────────────────────────
+    gid('sub-status').innerHTML=`<div class="vbox checking"><div class="vbox-ico">📍</div><h3>Getting GPS Fix…</h3>
+      <p>Warming up GPS chip then sampling. Move near a window for better accuracy. Stay still.</p>
+      <p id="gps-prog-stu" style="margin-top:.4rem;font-weight:600;color:var(--accent)">Starting warm-up…</p></div>`;
+    gid('chk-gps').innerHTML='<span class="badge badge-gold">⏳ Sampling…</span>';
+
+    const stuGPS=await getGPS((acc,attempt,total)=>{
+      const bar='█'.repeat(attempt)+'░'.repeat(total-attempt);
+      const qual=acc<=20?'🟢 Excellent':acc<=50?'🟢 Good':acc<=150?'🟡 Fair':acc<=300?'🟠 Poor':'🔴 Very poor';
+      const el=gid('gps-prog-stu');
+      if(el) el.textContent=`[${bar}] Reading ${attempt}/${total} — ±${acc}m ${qual}`;
+    });
+    const dist=haversine(stuGPS.lat, stuGPS.lng, sess.lecLat, sess.lecLng);
+    gid('sub-checks').style.display='block';
+
+    const accVal=Math.round(stuGPS.acc);
+    const gpsBadge=accVal<=50?`<span class="badge badge-green">✅ GPS ±${accVal}m (Good)</span>`
+      :accVal<=200?`<span class="badge badge-gold">⚠️ GPS ±${accVal}m (Fair)</span>`
+      :`<span class="badge badge-red">❌ GPS ±${accVal}m (Poor — move near window)</span>`;
+    gid('chk-gps').innerHTML=gpsBadge;
+
+    const gpsValid=(stuGPS.acc<9999); // acc=9999 means GPS completely failed
+
+    if(ipMatch || ipUnavailable){
+      // Passed (or IP check skipped due to lookup failure) — allow submission
+      const networkNote = ipUnavailable
+        ? `<p style="color:var(--warn)">⚠️ Network check unavailable — GPS only.</p>`
+        : `<p>✅ Same WiFi confirmed.</p>`;
+      gid('sub-status').innerHTML=`
+        <div class="vbox ok"><div class="vbox-ico">🎉</div><h3>Verification Passed!</h3>
+        ${networkNote}
+        <p>GPS captured with best accuracy ±<strong>${Math.round(stuGPS.acc)}m</strong>.</p></div>
+        <div class="card" style="margin-top:.8rem;padding:.85rem 1rem;font-size:.82rem;">
+          <div class="flex-b" style="margin-bottom:.35rem;"><span>📡 Public IP</span><span class="mono">${stuIP||'N/A'}</span></div>
+          <div class="flex-b" style="margin-bottom:.35rem;"><span>🌐 Subnet</span><span class="mono">${stuNet.subnet||'N/A'} ${subnetMatch?'✅ matches':''}  </span></div>
+          <div class="flex-b" style="margin-bottom:.35rem;"><span>📶 Connection</span><span class="mono">${connLabel(stuNet)}${stuNet.downlink?' · '+stuNet.downlink+'Mbps':''} ${sameConnType?'✅':''}</span></div>
+          <div class="flex-b" style="margin-bottom:.35rem;border-top:1px solid var(--border);padding-top:.35rem;"><span>📍 Coordinates</span><span class="mono">${stuGPS.lat.toFixed(5)}, ${stuGPS.lng.toFixed(5)}</span></div>
+          <div class="flex-b" style="margin-bottom:.35rem;"><span>🎯 GPS Accuracy</span><span class="mono fw6">±${Math.round(stuGPS.acc)}m</span></div>
+          <div class="flex-b"><span>📐 Distance to lecturer</span><span class="mono">${dist}m</span></div>
+        </div>`;
+      _canSubmit=true; gid('btn-sub-att').disabled=false;
+      gid('btn-sub-att').dataset.dist=dist;
+      gid('btn-sub-att').dataset.sid=sid;
+      gid('btn-sub-att').dataset.gpsAcc=Math.round(stuGPS.acc);
+    } else {
+      // IP check definitively failed — different network
+      gid('sub-status').innerHTML=`<div class="vbox fail"><div class="vbox-ico">🚫</div>
+        <h3>Wrong Network</h3>
+        <p>You are not on the same WiFi as your lecturer.</p>
+        <p style="margin-top:.4rem;font-size:.85rem;">Connect to the correct campus WiFi and try again. Using a VPN will not bypass this check.</p>
+      </div>`;
+    }
+  } catch(e){
+    gid('sub-status').innerHTML=`<div class="vbox fail"><div class="vbox-ico">❌</div><h3>Error</h3><p>${e.message||'Could not verify. Ensure GPS is enabled.'}</p></div>`;
+  }
+}
+
+async function submitAtt(){
+  if(!_canSubmit||!_pendingCourseId) return;
+  const btn=gid('btn-sub-att');
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Submitting…';
+  try{
+    const sid=btn.dataset.sid;
+    const dist=parseInt(btn.dataset.dist)||0;
+    const c=DS.courses[_pendingCourseId];
+    const recId=uid();
+    const rec={
+      id:recId, sessionId:sid, stuId:curUser.uid, stuName:curUser.name,
+      cCode:c.code, cTitle:c.title, time:Date.now(), status:'present', dist,
+      gpsMean:dist,
+      gpsVariance:parseInt(btn.dataset.gpsVariance)||0,
+      gpsIod:parseFloat(btn.dataset.gpsIod)||0,
+      gpsSamples:parseInt(btn.dataset.gpsSamples)||1
+    };
+    // ★ Write to Firestore → lecturer's live modal updates in real-time
+    await recordsCol().doc(recId).set(rec);
+    DS.records.push(rec);
+    closeModal('m-submit');
+    toast('✅ Attendance submitted! You are marked PRESENT.');
+    renderStuCourses();
+  } catch(e){
+    toast('Submission failed: '+e.message,'err');
+  } finally{
+    btn.disabled=false; btn.innerHTML='Mark Present';
+  }
+}
+
+function prevStuPh(inp){
+  if(inp.files&&inp.files[0]){ _stuPhFile=inp.files[0]; const r=new FileReader(); r.onload=e=>gid('stu-ph-prev').innerHTML=`<img src="${e.target.result}">`; r.readAsDataURL(inp.files[0]); }
+}
+async function stuChangePw(){
+  const n=gid('stu-pw1').value, n2=gid('stu-pw2').value;
+  if(n.length<6){ toast('Min 6 characters','err'); return; }
+  if(n!==n2){ toast('Passwords do not match','err'); return; }
+  await usersCol().doc(curUser.uid).update({password:n});
+  DS.users[curUser.uid].password=n;
+  toast('Password updated!');
+  gid('stu-pw1').value=''; gid('stu-pw2').value='';
+}
+
+// ═══════════════════════════════════════════════════════
+//  BOOT — restore session on page reload
+// ═══════════════════════════════════════════════════════
+window.addEventListener('load', async ()=>{
+  ensureFP();
+
+  // Show a loading state on the landing screen while we check auth
+  try{
+    await seedIfEmpty();
+  } catch(e){ console.warn('Seed skipped (offline or not first run)'); }
+
+  // Try to restore login session
+  try{
+    const saved=localStorage.getItem('oau_session');
+    if(saved){
+      const {uid:savedUid, role}=JSON.parse(saved);
+      const uDoc=await usersCol().doc(savedUid).get();
+      if(uDoc.exists){
+        const user=uDoc.data();
+        if(user.active){
+          curRole=role;
+          curUser={...user};
+          toast(`Welcome back, ${curUser.name.split(' ')[0]}! 👋`);
+          enterDashboard();
+          return;
+        }
+      }
+      localStorage.removeItem('oau_session');
+    }
+  } catch(e){ console.warn('Session restore error:',e); localStorage.removeItem('oau_session'); }
+
+  show('landing');
+});
+</script>
+</body>
 </html>
